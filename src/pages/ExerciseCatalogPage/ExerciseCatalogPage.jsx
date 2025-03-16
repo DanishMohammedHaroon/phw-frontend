@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./ExerciseCatalogPage.scss";
 
-// Sample data for exercises
+// Sample data for exercises (only to show the page can display them!)
 const sampleExercises = [
   {
     id: 1,
