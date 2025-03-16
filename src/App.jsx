@@ -6,7 +6,8 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage"; 
-
+import ErrorBoundary from "./ErrorBoundary";
+import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
 
 const App = () => {
   return (
@@ -16,7 +17,15 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/exercises" element={<ExerciseCatalogPage />} />
+        <Route
+          path="/exercises"
+          element={
+            <ErrorBoundary>
+              <ExerciseCatalogPage />
+            </ErrorBoundary>
+          }
+        />
+        <Route path="/assignments" element={<AssignmentsPage />} />
       </Routes>
     </Router>
   );

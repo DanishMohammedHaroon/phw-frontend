@@ -1,0 +1,122 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+const AssignmentForm = ({ onAssignmentCreated }) => {
+  const [physiotherapistId, setPhysiotherapistId] = useState("");
+  const [patientId, setPatientId] = useState("");
+  const [exerciseId, setExerciseId] = useState("");
+  const [repetitions, setRepetitions] = useState("");
+  const [sets, setSets] = useState("");
+  const [difficulty, setDifficulty] = useState("");
+  const [instructions, setInstructions] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/api/assignments",
+        {
+          physiotherapistId,
+          patientId,
+          exerciseId,
+          repetitions: parseInt(repetitions, 10),
+          sets: parseInt(sets, 10),
+          difficulty,
+          instructions,
+        }
+      );
+      console.log(response.data);
+      onAssignmentCreated(response.data.assignment);
+      setError("");
+      // Clear form fields
+      setPhysiotherapistId("");
+      setPatientId("");
+      setExerciseId("");
+      setRepetitions("");
+      setSets("");
+      setDifficulty("");
+      setInstructions("");
+    } catch (err) {
+      console.error("Error creating assignment:", err.response?.data?.message);
+      setError(err.response?.data?.message || "Failed to create assignment");
+    }
+  };
+
+  return (
+    <div
+      style={{
+        padding: "1rem",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        marginBottom: "1rem",
+      }}
+    >
+      <h3>Create Assignment</h3>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            type="text"
+            placeholder="Physiotherapist ID"
+            value={physiotherapistId}
+            onChange={(e) => setPhysiotherapistId(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Patient ID"
+            value={patientId}
+            onChange={(e) => setPatientId(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Exercise ID"
+            value={exerciseId}
+            onChange={(e) => setExerciseId(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            placeholder="Repetitions"
+            value={repetitions}
+            onChange={(e) => setRepetitions(e.target.value)}
+          />
+        </div>
+        <div>
+          <input
+            type="number"
+            placeholder="Sets"
+            value={sets}
+            onChange={(e) => setSets(e.target.value)}
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Difficulty"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          />
+        </div>
+        <div>
+          <textarea
+            placeholder="Instructions"
+            value={instructions}
+            onChange={(e) => setInstructions(e.target.value)}
+          />
+        </div>
+        <button type="submit">Create Assignment</button>
+      </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
+};
+
+export default AssignmentForm;

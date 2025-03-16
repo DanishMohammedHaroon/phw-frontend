@@ -1,40 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./ExerciseCatalogPage.scss";
 
-// Sample data for exercises (only to show the page can display them!)
-const sampleExercises = [
-  {
-    id: 1,
-    name: "Incline Hammer Curls",
-    muscle: "Biceps",
-    difficulty: "Beginner",
-    instructions: "Sit on an incline bench with a dumbbell in each hand.",
-  },
-  {
-    id: 2,
-    name: "Wide-Grip Barbell Curl",
-    muscle: "Biceps",
-    difficulty: "Beginner",
-    instructions:
-      "Stand with your feet shoulder-width apart and curl the barbell.",
-  },
-  {
-    id: 3,
-    name: "Triceps Dip",
-    muscle: "Triceps",
-    difficulty: "Intermediate",
-    instructions: "Use parallel bars or a bench to perform dips.",
-  },
-];
+const ExerciseCatalogPage = () => {
+// throw new Error("Simulated error in ExerciseCatalogPage");
 
-const ExerciseCatalog = () => {
+  const [exercises, setExercises] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch exercises from the backend
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/api/exercises");
+        setExercises(response.data);
+      } catch (err) {
+        console.error("Error fetching exercises:", err);
+        setError("Failed to load exercises");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExercises();
+  }, []);
+
+  if (loading) {
+    return (
+      <p style={{ textAlign: "center", padding: "2rem" }}>
+        Loading exercises...
+      </p>
+    );
+  }
+
+  if (error) {
+    return (
+      <p style={{ textAlign: "center", padding: "2rem", color: "red" }}>
+        {error}
+      </p>
+    );
+  }
+
   return (
     <div style={{ padding: "2rem" }}>
       <h2>Exercise Catalog</h2>
       <p>Browse our list of exercises below:</p>
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {sampleExercises.map((exercise) => (
+        {exercises.map((exercise) => (
           <li
             key={exercise.id}
             style={{
@@ -61,4 +75,4 @@ const ExerciseCatalog = () => {
   );
 };
 
-export default ExerciseCatalog;
+export default ExerciseCatalogPage;
