@@ -1,19 +1,28 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./LoginPage.scss"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // For now, simply log the input; you will integrate with your backend later
-    console.log("Logging in with:", { email, password });
-    // Navigate to Dashboard if login is successful (simulate for now)
-    navigate("/dashboard");
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/api/auth/login",
+        { email, password }
+      );
+      // If login is successful, update global state with user data and token
+      login(response.data.user, response.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    }
   };
 
   return (
