@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage"; 
 import ErrorBoundary from "./ErrorBoundary";
 import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
+import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
             </ErrorBoundary>
           }
         />
+        <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
         <Route path="/assignments" element={<AssignmentsPage />} />
       </Routes>
     </Router>
