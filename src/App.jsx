@@ -9,6 +9,9 @@ import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage
 import ErrorBoundary from "./ErrorBoundary";
 import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
 import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
+import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
+import ProgressPage from "./pages/ProgressPage/ProgressPage";
+
 
 const App = () => {
   return (
@@ -28,6 +31,8 @@ const App = () => {
         />
         <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
         <Route path="/assignments" element={<AssignmentsPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/progress" element={<ProgressPage />} />
       </Routes>
     </Router>
   );
