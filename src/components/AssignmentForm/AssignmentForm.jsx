@@ -2,21 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext"; // our global auth context
 
-const AssignmentForm = ({ onAssignmentCreated }) => {
+const AssignmentForm = ({ selectedClient, onAssignmentCreated }) => {
   // Get the current physiotherapist's details from global state
   const { user } = useAuth();
-  
-  // Instead of a physiotherapist ID input, we auto-fill it from the logged-in user.
+   console.log("AssignmentForm: selectedClient =", selectedClient);
+  // Instead of a physiotherapist ID input auto-fill it from the logged-in user.
   const physiotherapistId = user?.id || "";
 
-  // Sample clients data for dropdown
-  const sampleClients = [
-    { id: 101, name: "Alice Smith" },
-    { id: 102, name: "Bob Johnson" },
-    { id: 103, name: "Charlie Brown" },
-  ];
-
-  const [patientId, setPatientId] = useState("");
+  const [patientId, setPatientId] = useState(selectedClient);
   const [exerciseId, setExerciseId] = useState("");
   const [repetitions, setRepetitions] = useState("");
   const [sets, setSets] = useState("");
@@ -24,22 +17,34 @@ const AssignmentForm = ({ onAssignmentCreated }) => {
   const [instructions, setInstructions] = useState("");
   const [error, setError] = useState("");
 
+  // Sync the patientId with selectedClient when it changes
+  // Sync the patientId with selectedClient when it changes
+  React.useEffect(() => {
+    setPatientId(selectedClient);
+  }, [selectedClient]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!patientId) {
+      setError("Please select a client first.");
+      return;
+    }
     try {
-      const response = await axios.post("http://localhost:5050/api/assignments", {
-        physiotherapistId, // auto-filled from global state
-        patientId,
-        exerciseId,
-        repetitions: parseInt(repetitions, 10),
-        sets: parseInt(sets, 10),
-        difficulty,
-        instructions,
-      });
+      const response = await axios.post(
+        "http://localhost:5050/api/assignments",
+        {
+          physiotherapistId,
+          patientId,
+          exerciseId,
+          repetitions: parseInt(repetitions, 10),
+          sets: parseInt(sets, 10),
+          difficulty,
+          instructions,
+        }
+      );
       onAssignmentCreated(response.data.assignment);
       setError("");
-      // Clear form fields except physiotherapistId (which comes from context)
-      setPatientId("");
+      // Clear form fields except physiotherapistId and patientId
       setExerciseId("");
       setRepetitions("");
       setSets("");
@@ -52,35 +57,23 @@ const AssignmentForm = ({ onAssignmentCreated }) => {
   };
 
   return (
-    <div style={{ padding: "1rem", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "1rem" }}>
+    <div
+      style={{
+        padding: "1rem",
+        border: "1px solid #ccc",
+        borderRadius: "8px",
+        marginBottom: "1rem",
+      }}
+    >
       <h3>Create Assignment</h3>
+      <p>
+        Physiotherapist:{" "}
+        <strong>
+          {user ? `${user.name} (ID: ${user.id})` : "Not logged in"}
+        </strong>
+      </p>
+      <p>Selected Client ID: {patientId || "None selected"}</p>
       <form onSubmit={handleSubmit}>
-        {/* Display physiotherapist's name and ID */}
-        <div>
-          <label>
-            Physiotherapist:
-            <strong>{user ? `${user.name} (ID: ${user.id})` : "Not logged in"}</strong>
-          </label>
-        </div>
-
-        {/* Client selection dropdown */}
-        <div>
-          <label htmlFor="clientSelect">Select Client:</label>
-          <select
-            id="clientSelect"
-            value={patientId}
-            onChange={(e) => setPatientId(e.target.value)}
-            required
-          >
-            <option value="">--Select a Client--</option>
-            {sampleClients.map((client) => (
-              <option key={client.id} value={client.id}>
-                {client.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
         <div>
           <input
             type="text"
