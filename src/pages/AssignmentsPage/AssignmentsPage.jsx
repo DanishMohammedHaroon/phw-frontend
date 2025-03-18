@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AssignmentForm from "../../components/AssignmentForm/AssignmentForm";
 import AssignmentList from "../../components/AssignmentList/AssignmentList";
+import Back from "../../components/BackButton/BackButton";
 import ErrorBoundary from "../../ErrorBoundary";
 
 const AssignmentsPage = () => {
@@ -45,6 +46,7 @@ const AssignmentsPage = () => {
       <AssignmentList
         key={newAssignment ? newAssignment.id : "assignmentList"}
       />
+      <Back />
     </div>
   );
 };
