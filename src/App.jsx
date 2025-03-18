@@ -5,12 +5,12 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
-import ProgressPage from "./pages/ProgressPage/ProgressPage";
+import ClientWorkoutPage from "./pages//ClientWorkoutPage/ClientWorkoutPage";
 import MessagingPage from "./pages/MessagingPage/MessagingPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import PhysioDashboard from "./components/PhysioDashboard/PhysioDashboard";
 import ClientDashboard from "./components/ClientDashboard/ClientDashboard";
-import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
+import AssignmentManagerPage from "./pages/AssignmentManagerPage/AssignmentManagerPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage";
 import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
@@ -34,9 +34,9 @@ const App = () => {
           }
         />
         <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
-        <Route path="/assignments" element={<AssignmentsPage />} />
+        <Route path="/assignment-manager" element={<AssignmentManagerPage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/progress" element={<ProgressPage />} />
+        <Route path="/client-workout" element={<ClientWorkoutPage />} />
         <Route path="/messaging" element={<MessagingPage />} />
       </Routes>
     </Router>

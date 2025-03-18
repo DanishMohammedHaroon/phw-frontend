@@ -20,13 +20,13 @@ const PhysioDashboard = () => {
             <Link to="/exercises">Exercise Catalog</Link>
           </li>
           <li>
-            <Link to="/assignments">Manage Assignments</Link>
+            <Link to="/assignment-manager">Manage Assignments</Link>
           </li>
           <li>
             <Link to="/feedback">Submit/Review Feedback</Link>
           </li>
           <li>
-            <Link to="/progress">Progress Tracking</Link>
+            <Link to="/client-workout">Progress Tracking</Link>
           </li>
           <li>
             <Link to="/messaging">Secure Messaging</Link>

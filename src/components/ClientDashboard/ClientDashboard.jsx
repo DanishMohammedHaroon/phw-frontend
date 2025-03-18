@@ -22,7 +22,7 @@ const ClientDashboard = () => {
             <Link to="/feedback">Submit Feedback</Link>
           </li>
           <li>
-            <Link to="/progress">View Progress</Link>
+            <Link to="/client-workout">View Progress</Link>
           </li>
           <li>
             <Link to="/messaging">Messaging</Link>
