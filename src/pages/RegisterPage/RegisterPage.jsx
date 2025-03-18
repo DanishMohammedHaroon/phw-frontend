@@ -1,20 +1,41 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./RegisterPage.scss";
+// src/pages/RegisterPage.jsx
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("patient"); // default role
+  const [role, setRole] = useState("client");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // For now, log the input; you'll later integrate with your backend
-    console.log("Registering user:", { name, email, password, role });
-    navigate("/login"); // Simulate successful registration
+
+    // Simple input validation
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setError("All fields are required.");
+      return;
+    }
+
+    setError("");
+
+    try {
+      const response = await axios.post("http://localhost:5050/api/auth/register", {
+        name,
+        email,
+        password,
+        role,
+      });
+      // Optionally, navigate to login or auto-login the user
+      navigate("/login");
+    } catch (err) {
+      const errMsg = err.response?.data?.message || "Registration failed. Please try again.";
+      setError(errMsg);
+    }
   };
 
   return (
@@ -50,13 +71,13 @@ const RegisterPage = () => {
         </div>
         <div>
           <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="patient">Patient</option>
-            <option value="physiotherapist">Physiotherapist</option>
+            <option value="client">Client</option>
+            <option value="physio_therapist">Physiotherapist</option>
           </select>
         </div>
         <button type="submit">Register</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
     </div>
   );
 };

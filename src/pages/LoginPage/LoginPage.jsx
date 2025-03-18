@@ -15,13 +15,18 @@ const LoginPage = () => {
     try {
       const response = await axios.post(
         "http://localhost:5050/api/auth/login",
-        { email, password }
+        {
+          email,
+          password,
+        }
       );
-      // If login is successful, update global state with user data and token
       login(response.data.user, response.data.token);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      // Extract error message from response or fallback to a default message
+      const errMsg =
+        err.response?.data?.message || "Login failed. Please try again.";
+      setError(errMsg);
     }
   };
 
@@ -49,7 +54,7 @@ const LoginPage = () => {
         </div>
         <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
     </div>
   );
 };

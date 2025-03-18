@@ -8,6 +8,8 @@ import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ProgressPage from "./pages/ProgressPage/ProgressPage";
 import MessagingPage from "./pages/MessagingPage/MessagingPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import PhysioDashboard from "./components/PhysioDashboard/PhysioDashboard";
+import ClientDashboard from "./components/ClientDashboard/ClientDashboard";
 import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage";
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/physio-dashboard" element={<PhysioDashboard />} />
+        <Route path="/client-dashboard" element={<ClientDashboard />} />
         <Route
           path="/exercises"
           element={
