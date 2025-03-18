@@ -1,17 +1,17 @@
 import "./App.scss";
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage/LandingPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage"; 
 import ErrorBoundary from "./ErrorBoundary";
-import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
-import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ProgressPage from "./pages/ProgressPage/ProgressPage";
-
+import MessagingPage from "./pages/MessagingPage/MessagingPage";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import AssignmentsPage from "./pages/AssignmentsPage/AssignmentsPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage";
+import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
 
 const App = () => {
   return (
@@ -33,6 +33,7 @@ const App = () => {
         <Route path="/assignments" element={<AssignmentsPage />} />
         <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/progress" element={<ProgressPage />} />
+        <Route path="/messaging" element={<MessagingPage />} />
       </Routes>
     </Router>
   );
