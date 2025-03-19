@@ -13,6 +13,7 @@ import AssignmentManagerPage from "./pages/AssignmentManagerPage/AssignmentManag
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ExerciseCatalogPage from "./pages/ExerciseCatalogPage/ExerciseCatalogPage";
 import ExerciseDetailsPage from "./pages/ExerciseDetailsPage/ExerciseDetailsPage";
+import PhysiotherapistFeedbackPage from "./pages/PhysiotherapistFeedbackPage/PhysiotherapistFeedbackPage"
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/assignment-manager" element={<AssignmentManagerPage />} />
         <Route path="/client-workout" element={<ClientWorkoutSetupPage />} />
         <Route path="/messaging" element={<MessagingPage />} />
+        <Route path="/physio-feedback" element={<PhysiotherapistFeedbackPage />} />
       </Routes>
     </Router>
   );
