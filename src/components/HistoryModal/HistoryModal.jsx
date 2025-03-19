@@ -5,20 +5,28 @@ import Modal from "react-modal";
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
+// Static mapping for client IDs to names (for demo)
+const clientMapping = {
+  3: "Miguel Rodriguez",
+  4: "Li Wei",
+  5: "Fatima Al-Hassan",
+  // Add more mappings as needed
+};
+
 const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [exerciseMapping, setExerciseMapping] = useState({});
 
-  // Extract fetchHistory into a callback so we can call it again after deletion
+  // Fetch all assignments and filter them on the client
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch all assignments from the generic endpoint
       const response = await axios.get("http://localhost:5050/api/assignments");
       let assignments = response.data;
 
-      // Filter assignments belonging to this physiotherapist
+      // Filter assignments for the current physiotherapist
       assignments = assignments.filter(
         (assignment) =>
           String(assignment.physiotherapistId) === String(physiotherapistId)
@@ -28,7 +36,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
       const twoWeeksAgo = new Date();
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
-      // Filter assignments created in the last two weeks (using created_at or updated_at)
+      // Filter assignments from the last two weeks
       assignments = assignments.filter((assignment) => {
         const date = assignment.created_at
           ? new Date(assignment.created_at)
@@ -43,8 +51,6 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
         acc[clientId].push(assignment);
         return acc;
       }, {});
-
-      // Convert grouped object to an array for display
       setHistory(Object.entries(grouped));
       setError("");
     } catch (err) {
@@ -61,7 +67,31 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
     }
   }, [isOpen, physiotherapistId, fetchHistory]);
 
-  // Handler to delete an assignment by id
+  // Fetch exercises to build a mapping from exercise_id to title
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/api/exercises");
+        const mapping = {};
+        response.data.forEach((ex) => {
+          mapping[ex.exercise_id] = ex.title;
+        });
+        setExerciseMapping(mapping);
+      } catch (err) {
+        console.error("Error fetching exercises for mapping:", err);
+      }
+    };
+    fetchExercises();
+  }, []);
+
+  // Helper to calculate progress percentage (if your assignment tracks completedSets)
+  const getProgressPercentage = (assignment) => {
+    const totalSets = assignment.sets;
+    const completedSets = assignment.completedSets || 0;
+    return totalSets ? Math.round((completedSets / totalSets) * 100) : 0;
+  };
+
+  // Handler to delete an assignment
   const handleDelete = async (assignmentId) => {
     try {
       await axios.delete(
@@ -73,13 +103,6 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
       console.error("Error deleting assignment:", error);
       setError("Failed to delete assignment.");
     }
-  };
-
-  // Helper to calculate progress percentage for an assignment
-  const getProgressPercentage = (assignment) => {
-    const totalSets = assignment.sets;
-    const completedSets = assignment.completedSets || 0;
-    return totalSets ? Math.round((completedSets / totalSets) * 100) : 0;
   };
 
   return (
@@ -104,7 +127,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
       ) : (
         history.map(([clientId, assignments]) => (
           <div key={clientId} style={{ marginBottom: "1rem" }}>
-            <h3>Client ID: {clientId}</h3>
+            <h3>Client: {clientMapping[clientId] || clientId}</h3>
             <ul style={{ listStyle: "none", padding: 0 }}>
               {assignments
                 .sort(
@@ -124,8 +147,10 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
                     }}
                   >
                     <div>
-                      <strong>Exercise:</strong> {assignment.exerciseId} |{" "}
-                      <strong>Sets:</strong> {assignment.sets} |{" "}
+                      <strong>Exercise:</strong>{" "}
+                      {exerciseMapping[assignment.exerciseId] ||
+                        assignment.exerciseId}{" "}
+                      | <strong>Sets:</strong> {assignment.sets} |{" "}
                       <strong>Reps:</strong> {assignment.repetitions}
                     </div>
                     <div>
@@ -150,23 +175,22 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
                         ></div>
                       </div>
                     </div>
-                    <div
-                      style={{ position: "absolute", top: "4px", right: "4px" }}
+                    <button
+                      onClick={() => handleDelete(assignment.id)}
+                      style={{
+                        position: "absolute",
+                        top: "4px",
+                        right: "4px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        fontSize: "1.2rem",
+                        color: "red",
+                      }}
+                      title="Delete assignment"
                     >
-                      <button
-                        onClick={() => handleDelete(assignment.id)}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                          fontSize: "1.2rem",
-                          color: "red",
-                        }}
-                        title="Delete assignment"
-                      >
-                        &times;
-                      </button>
-                    </div>
+                      &times;
+                    </button>
                     <div>
                       <small>
                         Posted on:{" "}
