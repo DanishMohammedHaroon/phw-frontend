@@ -1,6 +1,4 @@
-import "./RegisterPage.scss";
-// src/pages/RegisterPage.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -9,31 +7,82 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("client");
+  const [physioList, setPhysioList] = useState([]);
+  const [selectedPhysio, setSelectedPhysio] = useState("");
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
+
+  // Fetch physiotherapists only if role is client
+  useEffect(() => {
+    if (role === "client") {
+      const fetchPhysios = async () => {
+        try {
+          const response = await axios.get(
+            "http://localhost:5050/api/physiotherapists"
+          );
+          setPhysioList(response.data);
+        } catch (err) {
+          console.error(
+            "Error fetching physiotherapists:",
+            err.response?.data?.message
+          );
+          setError("Failed to load physiotherapists.");
+        }
+      };
+      fetchPhysios();
+    } else {
+      // Clear physiotherapist selection if role is not client
+      setPhysioList([]);
+      setSelectedPhysio("");
+    }
+  }, [role]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Simple input validation
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    // Basic input validation
+    if (!name.trim() || !email.trim() || !password.trim() || !role) {
       setError("All fields are required.");
+      return;
+    }
+    // If role is client, ensure a physiotherapist is selected
+    if (role === "client" && !selectedPhysio) {
+      setError("Please select a physiotherapist.");
       return;
     }
 
     setError("");
-
     try {
-      const response = await axios.post("http://localhost:5050/api/auth/register", {
-        name,
-        email,
-        password,
+      const payload = {
+        name: name.trim(),
+        email: email.trim(),
+        password, // Consider hashing on backend for production
         role,
-      });
-      // Optionally, navigate to login or auto-login the user
-      navigate("/login");
+        // For clients, include the selected physiotherapist's ID; for physios, leave undefined or null.
+        physiotherapistId: role === "client" ? Number(selectedPhysio) : null,
+      };
+
+      const response = await axios.post(
+        "http://localhost:5050/api/auth/register",
+        payload
+      );
+      setSuccessMsg("Registration successful! Redirecting to login...");
+
+      // Optionally clear form fields
+      setName("");
+      setEmail("");
+      setPassword("");
+      setRole("client");
+      setSelectedPhysio("");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (err) {
-      const errMsg = err.response?.data?.message || "Registration failed. Please try again.";
+      console.error(err.response?.data);
+      const errMsg =
+        err.response?.data?.message || "Registration failed. Please try again.";
       setError(errMsg);
     }
   };
@@ -75,9 +124,30 @@ const RegisterPage = () => {
             <option value="physio_therapist">Physiotherapist</option>
           </select>
         </div>
+        {role === "client" && (
+          <div>
+            <label>
+              Select Your Physiotherapist:{" "}
+              <select
+                value={selectedPhysio}
+                onChange={(e) => setSelectedPhysio(e.target.value)}
+              >
+                <option value="">--Select Physiotherapist--</option>
+                {physioList.map((physio) => (
+                  <option key={physio.id} value={physio.id}>
+                    {physio.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        )}
         <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+      {successMsg && (
+        <p style={{ color: "green", marginTop: "1rem" }}>{successMsg}</p>
+      )}
     </div>
   );
 };

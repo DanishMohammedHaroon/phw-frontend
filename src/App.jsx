@@ -4,8 +4,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
-import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
-import ClientWorkoutPage from "./pages//ClientWorkoutPage/ClientWorkoutPage";
+import ClientWorkoutSetupPage from "./pages//ClientWorkoutSetupPage/ClientWorkoutSetupPage";
 import MessagingPage from "./pages/MessagingPage/MessagingPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import PhysioDashboard from "./components/PhysioDashboard/PhysioDashboard";
@@ -35,8 +34,7 @@ const App = () => {
         />
         <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
         <Route path="/assignment-manager" element={<AssignmentManagerPage />} />
-        <Route path="/feedback" element={<FeedbackPage />} />
-        <Route path="/client-workout" element={<ClientWorkoutPage />} />
+        <Route path="/client-workout" element={<ClientWorkoutSetupPage />} />
         <Route path="/messaging" element={<MessagingPage />} />
       </Routes>
     </Router>

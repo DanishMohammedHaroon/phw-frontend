@@ -19,9 +19,6 @@ const ClientDashboard = () => {
             <Link to="/exercises">Exercise Catalog</Link>
           </li>
           <li>
-            <Link to="/feedback">Submit Feedback</Link>
-          </li>
-          <li>
             <Link to="/client-workout">View Progress</Link>
           </li>
           <li>

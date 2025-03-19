@@ -1,51 +1,62 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 const FeedbackComponent = () => {
-  const [selectedPhysio, setSelectedPhysio] = useState("");
+  const { user } = useAuth();
+  // Get the assigned physiotherapist's id from the client's record
+  const assignedPhysioId = user?.physiotherapistId;
+  const [physioName, setPhysioName] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [physios, setPhysios] = useState([]);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Fetch physiotherapists (if available via an endpoint) or use a static list
+  // Fetch physiotherapist info (e.g., name) using the assignedPhysioId
   useEffect(() => {
-    const fetchPhysios = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5050/api/physiotherapists"
-        );
-        setPhysios(response.data);
-      } catch (err) {
-        // Fallback static list if endpoint is not available
-        setPhysios([
-          { id: 15, name: "Aisha Khan" },
-          { id: 16, name: "Raj Patel" },
-        ]);
+    const fetchPhysioInfo = async () => {
+      if (assignedPhysioId) {
+        try {
+          // Assumes an endpoint exists to fetch a single physiotherapist by id
+          const response = await axios.get(
+            `http://localhost:5050/api/physiotherapists/${assignedPhysioId}`
+          );
+          setPhysioName(response.data.name);
+        } catch (err) {
+          console.error(
+            "Error fetching physiotherapist info:",
+            err.response?.data?.message
+          );
+          // Fallback: display the id if fetching fails
+          setPhysioName(assignedPhysioId);
+        }
       }
     };
-    fetchPhysios();
-  }, []);
+    fetchPhysioInfo();
+  }, [assignedPhysioId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedPhysio || !feedback.trim()) {
-      setError("Please select a physiotherapist and enter your feedback.");
+    if (!assignedPhysioId) {
+      setError("You are not assigned to a physiotherapist.");
+      return;
+    }
+    if (!feedback.trim()) {
+      setError("Please enter your feedback.");
       return;
     }
     setError("");
     try {
-      // Replace with actual patientId if available from auth context
+      // Use the client's id from AuthContext (assumed to be user.id)
       await axios.post("http://localhost:5050/api/feedback", {
-        patientId: 1,
-        assignmentId: null, // or a specific assignment id if feedback is assignment-specific
-        status: "completed",
+        patientId: user.id,
+        physiotherapistId: assignedPhysioId,
+        status: "completed", // or another status as needed
         comments: feedback.trim(),
       });
       setSuccessMsg("Feedback submitted successfully!");
       setFeedback("");
     } catch (err) {
-      console.error(err);
+      console.error("Error submitting feedback:", err.response?.data?.message);
       setError("Failed to submit feedback.");
     }
   };
@@ -53,22 +64,17 @@ const FeedbackComponent = () => {
   return (
     <div style={{ marginTop: "2rem" }}>
       <h3>Submit Feedback</h3>
+      {assignedPhysioId ? (
+        <p>
+          Your feedback will be sent to:{" "}
+          <strong>{physioName || assignedPhysioId}</strong>
+        </p>
+      ) : (
+        <p style={{ color: "red" }}>
+          You are not assigned to any physiotherapist.
+        </p>
+      )}
       <form onSubmit={handleSubmit}>
-        <label>
-          Select Physiotherapist:{" "}
-          <select
-            value={selectedPhysio}
-            onChange={(e) => setSelectedPhysio(e.target.value)}
-          >
-            <option value="">--Select Physiotherapist--</option>
-            {physios.map((physio) => (
-              <option key={physio.id} value={physio.id}>
-                {physio.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
         <textarea
           placeholder="Enter your feedback"
           value={feedback}
