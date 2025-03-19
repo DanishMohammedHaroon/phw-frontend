@@ -4,34 +4,32 @@ import { useAuth } from "../../context/AuthContext";
 
 const FeedbackComponent = () => {
   const { user } = useAuth();
-  // Get the assigned physiotherapist's id from the client's record
+  // Get the assigned physiotherapist's id from the client record
   const assignedPhysioId = user?.physiotherapistId;
   const [physioName, setPhysioName] = useState("");
   const [feedback, setFeedback] = useState("");
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  // Fetch physiotherapist info (e.g., name) using the assignedPhysioId
+  // Fetch physiotherapist's name based on assignedPhysioId
   useEffect(() => {
-    const fetchPhysioInfo = async () => {
-      if (assignedPhysioId) {
-        try {
-          // Assumes an endpoint exists to fetch a single physiotherapist by id
-          const response = await axios.get(
-            `http://localhost:5050/api/physiotherapists/${assignedPhysioId}`
-          );
-          setPhysioName(response.data.name);
-        } catch (err) {
-          console.error(
-            "Error fetching physiotherapist info:",
-            err.response?.data?.message
-          );
-          // Fallback: display the id if fetching fails
-          setPhysioName(assignedPhysioId);
-        }
+    const fetchPhysioName = async () => {
+      if (!assignedPhysioId) return;
+      try {
+        const response = await axios.get(
+          `http://localhost:5050/api/physiotherapists/${assignedPhysioId}`
+        );
+        setPhysioName(response.data.name);
+      } catch (err) {
+        console.error(
+          "Error fetching physiotherapist info:",
+          err.response?.data?.message
+        );
+        // Fallback: display the ID if fetching fails
+        setPhysioName(assignedPhysioId);
       }
     };
-    fetchPhysioInfo();
+    fetchPhysioName();
   }, [assignedPhysioId]);
 
   const handleSubmit = async (e) => {
@@ -46,11 +44,10 @@ const FeedbackComponent = () => {
     }
     setError("");
     try {
-      // Use the client's id from AuthContext (assumed to be user.id)
       await axios.post("http://localhost:5050/api/feedback", {
         patientId: user.id,
         physiotherapistId: assignedPhysioId,
-        status: "completed", // or another status as needed
+        status: "completed",
         comments: feedback.trim(),
       });
       setSuccessMsg("Feedback submitted successfully!");
@@ -64,16 +61,10 @@ const FeedbackComponent = () => {
   return (
     <div style={{ marginTop: "2rem" }}>
       <h3>Submit Feedback</h3>
-      {assignedPhysioId ? (
-        <p>
-          Your feedback will be sent to:{" "}
-          <strong>{physioName || assignedPhysioId}</strong>
-        </p>
-      ) : (
-        <p style={{ color: "red" }}>
-          You are not assigned to any physiotherapist.
-        </p>
-      )}
+      <p>
+        Your feedback will be sent to:{" "}
+        <strong>{physioName || assignedPhysioId}</strong>
+      </p>
       <form onSubmit={handleSubmit}>
         <textarea
           placeholder="Enter your feedback"

@@ -19,7 +19,7 @@ const ClientDashboard = () => {
             <Link to="/exercises">Exercise Catalog</Link>
           </li>
           <li>
-            <Link to="/client-workout">View Progress</Link>
+            <Link to="/client-workout">Workout Setup</Link>
           </li>
           <li>
             <Link to="/messaging">Messaging</Link>

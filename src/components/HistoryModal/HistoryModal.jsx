@@ -5,24 +5,18 @@ import Modal from "react-modal";
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
-// Static mapping for client IDs to names (for demo)
-const clientMapping = {
-  3: "Miguel Rodriguez",
-  4: "Li Wei",
-  5: "Fatima Al-Hassan",
-  // Add more mappings as needed
-};
-
 const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [exerciseMapping, setExerciseMapping] = useState({});
+  const [clientMapping, setClientMapping] = useState({});
 
   // Fetch all assignments and filter them on the client
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
+      // Fetch all assignments from the generic endpoint
       const response = await axios.get("http://localhost:5050/api/assignments");
       let assignments = response.data;
 
@@ -84,6 +78,23 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
     fetchExercises();
   }, []);
 
+  // Fetch clients to build a mapping from client id to name
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/api/users/clients");
+        const mapping = {};
+        response.data.forEach((client) => {
+          mapping[client.id] = client.name;
+        });
+        setClientMapping(mapping);
+      } catch (err) {
+        console.error("Error fetching clients for mapping:", err.response?.data?.message);
+      }
+    };
+    fetchClients();
+  }, []);
+
   // Helper to calculate progress percentage (if your assignment tracks completedSets)
   const getProgressPercentage = (assignment) => {
     const totalSets = assignment.sets;
@@ -94,9 +105,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   // Handler to delete an assignment
   const handleDelete = async (assignmentId) => {
     try {
-      await axios.delete(
-        `http://localhost:5050/api/assignments/${assignmentId}`
-      );
+      await axios.delete(`http://localhost:5050/api/assignments/${assignmentId}`);
       // Re-fetch history after deletion
       fetchHistory();
     } catch (error) {
@@ -154,8 +163,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
                       <strong>Reps:</strong> {assignment.repetitions}
                     </div>
                     <div>
-                      <strong>Progress:</strong>{" "}
-                      {getProgressPercentage(assignment)}%
+                      <strong>Progress:</strong> {getProgressPercentage(assignment)}%
                       <div
                         style={{
                           background: "#e0e0e0",

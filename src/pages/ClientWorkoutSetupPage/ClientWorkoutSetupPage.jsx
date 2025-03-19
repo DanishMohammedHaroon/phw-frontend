@@ -1,4 +1,3 @@
-// src/pages/ClientWorkoutSetupPage.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
@@ -17,8 +16,12 @@ const daysOfWeek = [
 const ClientWorkoutSetupPage = () => {
   const { user } = useAuth();
   const clientId = user?.id;
+  const assignedPhysioId = user?.physiotherapistId;
+
   const [selectedDays, setSelectedDays] = useState([]);
   const [assignments, setAssignments] = useState([]);
+  const [exerciseMapping, setExerciseMapping] = useState({});
+  const [physioName, setPhysioName] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -33,9 +36,15 @@ const ClientWorkoutSetupPage = () => {
             params: { patientId: clientId },
           }
         );
-        setAssignments(response.data);
+        // Default completedSets to 0 if missing
+        const data = response.data.map((assignment) => ({
+          ...assignment,
+          completedSets: assignment.completedSets || 0,
+        }));
+        setAssignments(data);
       } catch (err) {
         setError("Failed to load assignments.");
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -43,9 +52,65 @@ const ClientWorkoutSetupPage = () => {
     fetchAssignments();
   }, [clientId]);
 
+  // Fetch exercises to build a mapping (exercise id -> title)
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/api/exercises");
+        const mapping = {};
+        response.data.forEach((ex) => {
+          // Assuming ex.exercise_id exists; fallback to ex.id if needed
+          mapping[ex.exercise_id || ex.id] = ex.title;
+        });
+        setExerciseMapping(mapping);
+      } catch (err) {
+        console.error("Error fetching exercises:", err.response?.data?.message);
+      }
+    };
+    fetchExercises();
+  }, []);
+
+  // Fetch physiotherapist info to get the name
+  useEffect(() => {
+    const fetchPhysio = async () => {
+      if (!assignedPhysioId) return;
+      try {
+        const response = await axios.get(
+          `http://localhost:5050/api/physiotherapists/${assignedPhysioId}`
+        );
+        setPhysioName(response.data.name);
+      } catch (err) {
+        console.error(
+          "Error fetching physiotherapist info:",
+          err.response?.data?.message
+        );
+        setPhysioName(assignedPhysioId);
+      }
+    };
+    fetchPhysio();
+  }, [assignedPhysioId]);
+
+  // Handler for toggling workout days
   const handleDayToggle = (day) => {
     setSelectedDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
+  };
+
+  // Handler for marking a set as complete (updates local state)
+  const handleCompleteSet = (assignmentId) => {
+    setAssignments((prev) =>
+      prev.map((assignment) => {
+        if (assignment.id === assignmentId) {
+          const newCompleted = Math.min(
+            assignment.completedSets + 1,
+            assignment.sets
+          );
+          // Optionally, update backend with a PUT request here.
+          return { ...assignment, completedSets: newCompleted };
+        }
+        return assignment;
+      })
     );
   };
 
@@ -95,15 +160,20 @@ const ClientWorkoutSetupPage = () => {
                 }}
               >
                 <div>
-                  {/* Show exercise title if available; fallback to exerciseId */}
-                  <h4>{assignment.exerciseTitle || assignment.exerciseId}</h4>
+                  {/* Display exercise title using the mapping */}
+                  <h4>
+                    {exerciseMapping[assignment.exerciseId] ||
+                      assignment.exerciseId}
+                  </h4>
                   <p>
-                    Sets: {assignment.sets} | Reps: {assignment.repetitions}
+                    Sets: {assignment.completedSets} / {assignment.sets} | Reps:{" "}
+                    {assignment.repetitions}
                   </p>
                 </div>
                 <RoundProgressTracker
                   totalSets={assignment.sets}
-                  completedSets={assignment.completedSets || 0}
+                  completedSets={assignment.completedSets}
+                  onClick={() => handleCompleteSet(assignment.id)}
                 />
               </li>
             ))}
@@ -113,20 +183,22 @@ const ClientWorkoutSetupPage = () => {
 
       <hr />
 
-      {/* Feedback Component */}
-      <FeedbackComponent />
+      {/* Feedback Section */}
+      <FeedbackComponent
+        physiotherapistName={physioName} // Pass the physio name for display in the component
+      />
     </div>
   );
 };
 
-// A simple round progress tracker using an SVG circle
-const RoundProgressTracker = ({ totalSets, completedSets }) => {
+// A simple round progress tracker using an SVG circle with an onClick handler
+const RoundProgressTracker = ({ totalSets, completedSets, onClick }) => {
   const radius = 20;
   const circumference = 2 * Math.PI * radius;
   const progress = totalSets > 0 ? completedSets / totalSets : 0;
   const offset = circumference - progress * circumference;
   return (
-    <svg width="50" height="50">
+    <svg width="50" height="50" onClick={onClick} style={{ cursor: "pointer" }}>
       <circle
         stroke="#e6e6e6"
         fill="transparent"

@@ -26,9 +26,6 @@ const PhysioDashboard = () => {
             <Link to="/feedback">Review Feedback</Link>
           </li>
           <li>
-            <Link to="/client-workout">Progress Tracking</Link>
-          </li>
-          <li>
             <Link to="/messaging">Secure Messaging</Link>
           </li>
           {/* Add more links as needed */}
