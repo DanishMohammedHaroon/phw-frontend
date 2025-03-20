@@ -1,7 +1,8 @@
+// src/pages/ClientMessaging.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-import socket from "../../socket.js";
+import socket from "../../socket";
 
 const ClientMessaging = () => {
   const { user } = useAuth();
@@ -12,15 +13,40 @@ const ClientMessaging = () => {
   const [newMsg, setNewMsg] = useState("");
   const [error, setError] = useState("");
 
+  // Function to fetch persisted messages from backend
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get("http://localhost:5050/api/messages", {
+        params: { clientId, physioId: assignedPhysioId },
+      });
+      setMessages(response.data);
+    } catch (err) {
+      console.error("Failed to load messages:", err.response?.data || err);
+      setError("Failed to load messages.");
+    }
+  };
+
+  // Fetch persisted messages on mount (or when client/physio IDs change)
+  useEffect(() => {
+    if (clientId && assignedPhysioId) {
+      fetchMessages();
+    }
+  }, [clientId, assignedPhysioId]);
+
+  // Socket connection and joining room for real-time updates
   useEffect(() => {
     socket.connect();
-    // Join a room based on the conversation between the client and physiotherapist
     const room = `physio:${assignedPhysioId}_client:${clientId}`;
     socket.emit("join", room);
-    socket.on("receiveMessage", (data) => {
+
+    const messageListener = (data) => {
+      console.log("Received message:", data);
       setMessages((prev) => [...prev, data]);
-    });
+    };
+    socket.on("receiveMessage", messageListener);
+
     return () => {
+      socket.off("receiveMessage", messageListener);
       socket.disconnect();
     };
   }, [clientId, assignedPhysioId]);
@@ -36,6 +62,7 @@ const ClientMessaging = () => {
       timestamp: new Date().toISOString(),
     };
     socket.emit("sendMessage", data);
+    // Optionally add to local state (so the message appears immediately)
     setMessages((prev) => [...prev, data]);
     setNewMsg("");
   };
