@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-import socket from "../../socket";
+import socket from "../../socket.js";
 
 const PhysioMessaging = () => {
   const { user } = useAuth();
