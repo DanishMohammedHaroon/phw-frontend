@@ -1,0 +1,39 @@
+.client-dashboard {
+  padding: 2rem;
+
+  &__heading {
+    // Customize heading styles here if needed
+    margin-bottom: 1rem;
+  }
+
+  &__welcome {
+    // Customize welcome text styles if desired
+    margin-bottom: 1rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+
+    &-item {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__logout-button {
+    // You can add additional button styles here
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+}
