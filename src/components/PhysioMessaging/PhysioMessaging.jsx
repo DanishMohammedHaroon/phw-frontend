@@ -1,7 +1,8 @@
+// src/pages/PhysioMessaging.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-import socket from "../../socket.js";
+import socket from "../../socket";
 
 const PhysioMessaging = () => {
   const { user } = useAuth();
@@ -13,36 +14,13 @@ const PhysioMessaging = () => {
   const [newMsg, setNewMsg] = useState("");
   const [error, setError] = useState("");
 
-  // Connect socket on component mount
+  // Connect socket when component mounts
   useEffect(() => {
     socket.connect();
     return () => {
       socket.disconnect();
     };
   }, []);
-
-  // Join room when a client is selected
-  useEffect(() => {
-    if (selectedClientId) {
-      // Use a room identifier, for example: "physio:{physioId}_client:{selectedClientId}"
-      const room = `physio:${physioId}_client:${selectedClientId}`;
-      socket.emit("join", room);
-
-      // Optionally, clear previous messages when switching room
-      setMessages([]);
-
-      // Listen for incoming messages on this room
-      socket.on("receiveMessage", (data) => {
-        // data: { from, to, message, room }
-        setMessages((prev) => [...prev, data]);
-      });
-
-      // Cleanup listener on room change/unmount
-      return () => {
-        socket.off("receiveMessage");
-      };
-    }
-  }, [selectedClientId, physioId]);
 
   // Fetch clients assigned to this physiotherapist
   useEffect(() => {
@@ -65,6 +43,42 @@ const PhysioMessaging = () => {
     }
   }, [physioId]);
 
+  // Fetch conversation history when a client is selected
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        // Adjust parameters as needed based on your backend design.
+        const response = await axios.get("http://localhost:5050/api/messages", {
+          params: { clientId: selectedClientId, physioId },
+        });
+        setMessages(response.data);
+      } catch (err) {
+        console.error("Failed to fetch messages:", err);
+      }
+    };
+
+    if (selectedClientId) {
+      // Join the conversation room
+      const room = `physio:${physioId}_client:${selectedClientId}`;
+      console.log("Joining room:", room);
+      socket.emit("join", room);
+      // Fetch conversation history from backend
+      fetchMessages();
+
+      // Listen for new messages
+      const messageListener = (data) => {
+        console.log("Received message:", data);
+        setMessages((prev) => [...prev, data]);
+      };
+      socket.on("receiveMessage", messageListener);
+
+      // Cleanup listener on room change or component unmount
+      return () => {
+        socket.off("receiveMessage", messageListener);
+      };
+    }
+  }, [selectedClientId, physioId]);
+
   const handleSendMessage = () => {
     if (!newMsg.trim() || !selectedClientId) return;
     const room = `physio:${physioId}_client:${selectedClientId}`;
@@ -75,9 +89,7 @@ const PhysioMessaging = () => {
       room,
       timestamp: new Date().toISOString(),
     };
-    // Emit message via socket
     socket.emit("sendMessage", data);
-    // Optionally add to local state
     setMessages((prev) => [...prev, data]);
     setNewMsg("");
   };
