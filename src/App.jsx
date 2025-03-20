@@ -24,7 +24,14 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/physio-dashboard" element={<PhysioDashboard />} />
-        <Route path="/client-dashboard" element={<ClientDashboard />} />
+        <Route
+          path="/client-dashboard"
+          element={
+            <ErrorBoundary>
+              <ClientDashboard />
+            </ErrorBoundary>
+          }
+        />
         <Route
           path="/exercises"
           element={
@@ -37,7 +44,10 @@ const App = () => {
         <Route path="/assignment-manager" element={<AssignmentManagerPage />} />
         <Route path="/client-workout" element={<ClientWorkoutSetupPage />} />
         <Route path="/messaging" element={<MessagingPage />} />
-        <Route path="/physio-feedback" element={<PhysiotherapistFeedbackPage />} />
+        <Route
+          path="/physio-feedback"
+          element={<PhysiotherapistFeedbackPage />}
+        />
       </Routes>
     </Router>
   );

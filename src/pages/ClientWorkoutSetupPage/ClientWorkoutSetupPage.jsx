@@ -97,22 +97,32 @@ const ClientWorkoutSetupPage = () => {
     );
   };
 
-  // Handler for marking a set as complete (updates local state)
-  const handleCompleteSet = (assignmentId) => {
-    setAssignments((prev) =>
-      prev.map((assignment) => {
-        if (assignment.id === assignmentId) {
-          const newCompleted = Math.min(
-            assignment.completedSets + 1,
-            assignment.sets
-          );
-          // Optionally, update backend with a PUT request here.
-          return { ...assignment, completedSets: newCompleted };
-        }
-        return assignment;
-      })
-    );
-  };
+ const handleCompleteSet = async (assignmentId) => {
+   // Find the assignment from local state
+   const assignment = assignments.find((a) => a.id === assignmentId);
+   if (!assignment) return;
+
+   const newCompleted = Math.min(assignment.completedSets + 1, assignment.sets);
+
+   try {
+     // Send a PUT request to update the progress in the backend
+     await axios.put(
+       `http://localhost:5050/api/assignments/${assignmentId}/progress`,
+       {
+         newCompleted, // The new progress count
+       }
+     );
+     // If successful, update local state
+     setAssignments((prev) =>
+       prev.map((a) =>
+         a.id === assignmentId ? { ...a, completedSets: newCompleted } : a
+       )
+     );
+   } catch (err) {
+     console.error("Error updating progress:", err.response?.data || err);
+     // Optionally, display an error message to the user
+   }
+ };
 
   return (
     <div style={{ padding: "2rem" }}>
