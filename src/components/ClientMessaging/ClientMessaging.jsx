@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+mport React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import socket from "../../socket";
+import "./ClientMessaging.scss";
 
 const ClientMessaging = () => {
   const { user } = useAuth();
@@ -100,22 +101,16 @@ const ClientMessaging = () => {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Messaging with Your Physiotherapist</h2>
-      <div
-        style={{
-          border: "1px solid #ccc",
-          padding: "1rem",
-          height: "60vh",
-          overflowY: "auto",
-          marginBottom: "1rem",
-        }}
-      >
+    <div className="client-messaging">
+      <h2 className="client-messaging__heading">
+        Messaging with Your Physiotherapist
+      </h2>
+      <div className="client-messaging__messages">
         {messages.length === 0 ? (
           <p>No messages yet.</p>
         ) : (
           messages.map((msg, index) => (
-            <div key={index} style={{ marginBottom: "0.5rem" }}>
+            <div key={index} className="client-messaging__message">
               <strong>{getSenderName(msg.from)}</strong>: {msg.message}
               <br />
               <small>{new Date(msg.timestamp).toLocaleString()}</small>
@@ -123,22 +118,22 @@ const ClientMessaging = () => {
           ))
         )}
       </div>
-      <div>
+      <div className="client-messaging__input-container">
         <input
           type="text"
           value={newMsg}
           onChange={(e) => setNewMsg(e.target.value)}
           placeholder="Type a message..."
-          style={{ width: "80%", padding: "0.5rem" }}
+          className="client-messaging__input"
         />
         <button
           onClick={handleSendMessage}
-          style={{ padding: "0.5rem", marginLeft: "0.5rem" }}
+          className="client-messaging__send-button"
         >
           Send
         </button>
       </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="client-messaging__error">{error}</p>}
     </div>
   );
 };

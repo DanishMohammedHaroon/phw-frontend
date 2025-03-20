@@ -1,0 +1,40 @@
+.client-messaging {
+  padding: 2rem;
+
+  &__heading {
+    margin-bottom: 1rem;
+  }
+
+  &__messages {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+
+  &__message {
+    margin-bottom: 0.5rem;
+  }
+
+  &__input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    width: 80%;
+    padding: 0.5rem;
+  }
+
+  &__send-button {
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+
+  &__error {
+    color: red;
+    margin-top: 1rem;
+  }
+}
