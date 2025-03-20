@@ -1,4 +1,3 @@
-// src/pages/PhysioMessaging.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
@@ -7,20 +6,39 @@ import socket from "../../socket";
 const PhysioMessaging = () => {
   const { user } = useAuth();
   const physioId = user?.id;
-
+  const [physioName, setPhysioName] = useState("");
   const [clients, setClients] = useState([]);
   const [selectedClientId, setSelectedClientId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMsg, setNewMsg] = useState("");
   const [error, setError] = useState("");
 
-  // Connect socket when component mounts
+  // Connect socket on mount
   useEffect(() => {
     socket.connect();
     return () => {
       socket.disconnect();
     };
   }, []);
+
+  // Fetch physiotherapist info
+  useEffect(() => {
+    const fetchPhysio = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5050/api/physiotherapists/${physioId}`
+        );
+        setPhysioName(response.data.name);
+      } catch (err) {
+        console.error(
+          "Error fetching physiotherapist info:",
+          err.response?.data?.message
+        );
+        setPhysioName(physioId);
+      }
+    };
+    if (physioId) fetchPhysio();
+  }, [physioId]);
 
   // Fetch clients assigned to this physiotherapist
   useEffect(() => {
@@ -44,42 +62,36 @@ const PhysioMessaging = () => {
   }, [physioId]);
 
   // Fetch conversation history when a client is selected
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        // Adjust parameters as needed based on your backend design.
-        const response = await axios.get("http://localhost:5050/api/messages", {
-          params: { clientId: selectedClientId, physioId },
-        });
-        setMessages(response.data);
-      } catch (err) {
-        console.error("Failed to fetch messages:", err);
-      }
-    };
+  const fetchMessages = async (clientId) => {
+    try {
+      const response = await axios.get("http://localhost:5050/api/messages", {
+        params: { clientId, physioId },
+      });
+      setMessages(response.data);
+    } catch (err) {
+      console.error("Failed to load messages:", err.response?.data || err);
+      setError("Failed to load messages.");
+    }
+  };
 
+  useEffect(() => {
     if (selectedClientId) {
-      // Join the conversation room
       const room = `physio:${physioId}_client:${selectedClientId}`;
       console.log("Joining room:", room);
       socket.emit("join", room);
-      // Fetch conversation history from backend
-      fetchMessages();
-
-      // Listen for new messages
+      fetchMessages(selectedClientId);
       const messageListener = (data) => {
         console.log("Received message:", data);
         setMessages((prev) => [...prev, data]);
       };
       socket.on("receiveMessage", messageListener);
-
-      // Cleanup listener on room change or component unmount
       return () => {
         socket.off("receiveMessage", messageListener);
       };
     }
   }, [selectedClientId, physioId]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!newMsg.trim() || !selectedClientId) return;
     const room = `physio:${physioId}_client:${selectedClientId}`;
     const data = {
@@ -89,9 +101,29 @@ const PhysioMessaging = () => {
       room,
       timestamp: new Date().toISOString(),
     };
-    socket.emit("sendMessage", data);
-    setMessages((prev) => [...prev, data]);
-    setNewMsg("");
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/api/messages",
+        data
+      );
+      const savedMessage = response.data.messageData || data;
+      socket.emit("sendMessage", savedMessage);
+      setMessages((prev) => [...prev, savedMessage]);
+      setNewMsg("");
+    } catch (err) {
+      console.error("Error sending message:", err.response?.data || err);
+      setError("Failed to send message.");
+    }
+  };
+
+  // Updated helper: get sender's name based on type conversion
+  const getSenderName = (msgFrom) => {
+    if (Number(msgFrom) === Number(physioId)) {
+      return physioName;
+    } else {
+      const client = clients.find((c) => Number(c.id) === Number(msgFrom));
+      return client ? client.name : "Unknown Client";
+    }
   };
 
   return (
@@ -152,8 +184,7 @@ const PhysioMessaging = () => {
           ) : (
             messages.map((msg, index) => (
               <div key={index} style={{ marginBottom: "0.5rem" }}>
-                <strong>{msg.from === physioId ? "You" : "Client"}</strong>:{" "}
-                {msg.message}
+                <strong>{getSenderName(msg.from)}</strong>: {msg.message}
                 <br />
                 <small>{new Date(msg.timestamp).toLocaleString()}</small>
               </div>
