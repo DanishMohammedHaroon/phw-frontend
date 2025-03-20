@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import "./ExerciseDetailsPage.scss";
 
 const ExerciseDetail = () => {
   const { id } = useParams(); // 'id' corresponds to exercise_id
@@ -26,29 +27,33 @@ const ExerciseDetail = () => {
     fetchExercise();
   }, [id]);
 
-  if (loading) return <p>Loading exercise details...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!exercise) return <p>Exercise not found.</p>;
+  if (loading)
+    return (
+      <p className="exercise-detail__loading">Loading exercise details...</p>
+    );
+  if (error) return <p className="exercise-detail__error">{error}</p>;
+  if (!exercise)
+    return <p className="exercise-detail__not-found">Exercise not found.</p>;
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>{exercise.title}</h2>
-      <p>
+    <div className="exercise-detail">
+      <h2 className="exercise-detail__title">{exercise.title}</h2>
+      <p className="exercise-detail__description">
         <strong>Description:</strong> {exercise.description}
       </p>
-      <p>
+      <p className="exercise-detail__difficulty">
         <strong>Difficulty (Level):</strong> {exercise.level}
       </p>
       {exercise.body_parts && (
-        <div>
-          <p>
+        <div className="exercise-detail__body-parts">
+          <p className="exercise-detail__primary">
             <strong>Primary Muscle Group:</strong>{" "}
             {Array.isArray(exercise.body_parts.primary)
               ? exercise.body_parts.primary.join(", ")
               : exercise.body_parts.primary}
           </p>
           {exercise.body_parts.secondary && (
-            <p>
+            <p className="exercise-detail__secondary">
               <strong>Secondary Muscle Group:</strong>{" "}
               {Array.isArray(exercise.body_parts.secondary)
                 ? exercise.body_parts.secondary.join(", ")
@@ -58,7 +63,7 @@ const ExerciseDetail = () => {
         </div>
       )}
       {exercise.exercise_details && (
-        <div>
+        <div className="exercise-detail__details">
           <p>
             <strong>Force:</strong> {exercise.exercise_details.force}
           </p>
@@ -70,23 +75,25 @@ const ExerciseDetail = () => {
           </p>
         </div>
       )}
-      <p>
+      <p className="exercise-detail__category">
         <strong>Category:</strong> {exercise.category}
       </p>
       {exercise.images && exercise.images.length > 0 && (
-        <div>
-          <h3>Images</h3>
+        <div className="exercise-detail__images">
+          <h3 className="exercise-detail__images-title">Images</h3>
           {exercise.images.map((img, index) => (
             <img
               key={index}
               src={`http://localhost:5050/images/${img}`}
               alt={exercise.title}
-              style={{ maxWidth: "100%", marginBottom: "1rem" }}
+              className="exercise-detail__image"
             />
           ))}
         </div>
       )}
-      <Link to="/exercises">Back to Exercise Catalog</Link>
+      <Link to="/exercises" className="exercise-detail__back-link">
+        Back to Exercise Catalog
+      </Link>
     </div>
   );
 };

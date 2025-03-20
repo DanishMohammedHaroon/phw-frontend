@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import "./LoginPage.scss";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,6 @@ const LoginPage = () => {
       login(response.data.user, response.data.token);
       navigate("/dashboard");
     } catch (err) {
-      // Extract error message from response or fallback to a default message
       const errMsg =
         err.response?.data?.message || "Login failed. Please try again.";
       setError(errMsg);
@@ -31,30 +31,34 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
+    <div className="login-page">
+      <h2 className="login-page__title">Login</h2>
+      <form onSubmit={handleLogin} className="login-page__form">
+        <div className="login-page__form-group">
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="login-page__input"
           />
         </div>
-        <div>
+        <div className="login-page__form-group">
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="login-page__input"
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="login-page__button">
+          Login
+        </button>
       </form>
-      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+      {error && <p className="login-page__error">{error}</p>}
     </div>
   );
 };

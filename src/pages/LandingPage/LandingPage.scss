@@ -1,0 +1,28 @@
+.landing-page {
+  text-align: center;
+  padding: 2rem;
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    margin-bottom: 1.5rem;
+  }
+
+  &__links {
+    font-size: 1rem;
+  }
+
+  &__link {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 0.5rem;
+    transition: color 0.3s;
+
+    &:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+  }
+}

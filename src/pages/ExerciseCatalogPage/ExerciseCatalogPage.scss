@@ -1,0 +1,47 @@
+.exercise-catalog {
+  padding: 2rem;
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 4px;
+  }
+
+  &__item-title {
+    margin: 0 0 0.5rem;
+  }
+
+  &__item-description {
+    margin: 0 0 0.5rem;
+  }
+
+  &__item-link {
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__loading,
+  &__error {
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  &__error {
+    color: red;
+  }
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import socket from "../../socket";
+import "./PhysioMessaging.scss";
 
 const PhysioMessaging = () => {
   const { user } = useAuth();
@@ -116,7 +117,7 @@ const PhysioMessaging = () => {
     }
   };
 
-  // Updated helper: get sender's name based on type conversion
+  // Helper to get sender's name based on message's "from" value
   const getSenderName = (msgFrom) => {
     if (Number(msgFrom) === Number(physioId)) {
       return physioName;
@@ -127,28 +128,21 @@ const PhysioMessaging = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "80vh", padding: "1rem" }}>
-      <div
-        style={{
-          flex: "1",
-          borderRight: "1px solid #ccc",
-          paddingRight: "1rem",
-        }}
-      >
-        <h3>Your Clients</h3>
+    <div className="physio-messaging">
+      <div className="physio-messaging__clients-panel">
+        <h3 className="physio-messaging__clients-title">Your Clients</h3>
         {clients.length === 0 ? (
-          <p>No clients assigned.</p>
+          <p className="physio-messaging__no-clients">No clients assigned.</p>
         ) : (
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <ul className="physio-messaging__client-list">
             {clients.map((client) => (
               <li
                 key={client.id}
-                style={{
-                  padding: "0.5rem",
-                  cursor: "pointer",
-                  backgroundColor:
-                    selectedClientId === client.id ? "#f0f0f0" : "transparent",
-                }}
+                className={`physio-messaging__client-item ${
+                  selectedClientId === client.id
+                    ? "physio-messaging__client-item--selected"
+                    : ""
+                }`}
                 onClick={() => setSelectedClientId(client.id)}
               >
                 {client.name}
@@ -157,33 +151,18 @@ const PhysioMessaging = () => {
           </ul>
         )}
       </div>
-      <div
-        style={{
-          flex: "2",
-          paddingLeft: "1rem",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <h3>
+      <div className="physio-messaging__conversation-panel">
+        <h3 className="physio-messaging__conversation-title">
           Conversation with{" "}
           {clients.find((c) => c.id === selectedClientId)?.name ||
             "Select a client"}
         </h3>
-        <div
-          style={{
-            flex: "1",
-            border: "1px solid #ccc",
-            padding: "1rem",
-            overflowY: "auto",
-            marginBottom: "1rem",
-          }}
-        >
+        <div className="physio-messaging__messages-container">
           {messages.length === 0 ? (
-            <p>No messages yet.</p>
+            <p className="physio-messaging__no-messages">No messages yet.</p>
           ) : (
             messages.map((msg, index) => (
-              <div key={index} style={{ marginBottom: "0.5rem" }}>
+              <div key={index} className="physio-messaging__message">
                 <strong>{getSenderName(msg.from)}</strong>: {msg.message}
                 <br />
                 <small>{new Date(msg.timestamp).toLocaleString()}</small>
@@ -191,22 +170,22 @@ const PhysioMessaging = () => {
             ))
           )}
         </div>
-        <div>
+        <div className="physio-messaging__input-container">
           <input
             type="text"
             value={newMsg}
             onChange={(e) => setNewMsg(e.target.value)}
             placeholder="Type a message..."
-            style={{ width: "80%", padding: "0.5rem" }}
+            className="physio-messaging__input"
           />
           <button
             onClick={handleSendMessage}
-            style={{ padding: "0.5rem", marginLeft: "0.5rem" }}
+            className="physio-messaging__send-button"
           >
             Send
           </button>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="physio-messaging__error">{error}</p>}
       </div>
     </div>
   );

@@ -1,0 +1,99 @@
+.history-modal {
+  max-width: 600px;
+  margin: auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  position: relative;
+
+  &__overlay {
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__close-btn {
+    float: right;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  &__loading {
+    /* Additional loading styles if needed */
+  }
+
+  &__error {
+    color: red;
+    margin-top: 1rem;
+  }
+
+  &__no-history {
+    margin-top: 1rem;
+  }
+
+  &__client-group {
+    margin-bottom: 1rem;
+  }
+
+  &__client-title {
+    margin-bottom: 0.5rem;
+  }
+
+  &__assignment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__assignment-item {
+    position: relative;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  &__assignment-info {
+    margin-bottom: 0.5rem;
+  }
+
+  &__progress-section {
+    margin-bottom: 0.5rem;
+  }
+
+  &__progress-bar {
+    background: #e0e0e0;
+    border-radius: 5px;
+    height: 8px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  &__progress {
+    height: 100%;
+    border-radius: 5px;
+    background: #76c7c0;
+  }
+
+  &__delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: red;
+  }
+
+  &__timestamp {
+    margin-top: 0.5rem;
+  }
+}

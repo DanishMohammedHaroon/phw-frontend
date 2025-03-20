@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import "./PhysiotherapistFeedbackPage.scss";
 
 const PhysiotherapistFeedbackPage = () => {
   const { user } = useAuth();
@@ -42,7 +43,6 @@ const PhysiotherapistFeedbackPage = () => {
         const response = await axios.get(
           "http://localhost:5050/api/users/clients"
         );
-        // Filter clients by assigned physiotherapist
         const assignedClients = response.data.filter(
           (client) =>
             String(client.physiotherapistId) === String(physiotherapistId)
@@ -64,26 +64,26 @@ const PhysiotherapistFeedbackPage = () => {
   );
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Feedback for Your Clients</h2>
+    <div className="physio-feedback">
+      <h2 className="physio-feedback__title">Feedback for Your Clients</h2>
       {loading ? (
-        <p>Loading...</p>
+        <p className="physio-feedback__loading">Loading...</p>
       ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <p className="physio-feedback__error">{error}</p>
       ) : (
-        <div style={{ display: "flex", gap: "2rem" }}>
+        <div className="physio-feedback__container">
           {/* Client List */}
-          <div style={{ flex: "1" }}>
-            <h3>Your Clients</h3>
-            <ul style={{ listStyle: "none", padding: 0 }}>
+          <div className="physio-feedback__clients">
+            <h3 className="physio-feedback__clients-title">Your Clients</h3>
+            <ul className="physio-feedback__client-list">
               {clients.map((client) => (
                 <li
                   key={client.id}
-                  style={{
-                    marginBottom: "0.5rem",
-                    cursor: "pointer",
-                    color: selectedClientId === client.id ? "blue" : "inherit",
-                  }}
+                  className={`physio-feedback__client-item ${
+                    selectedClientId === client.id
+                      ? "physio-feedback__client-item--selected"
+                      : ""
+                  }`}
                   onClick={() => setSelectedClientId(client.id)}
                 >
                   {client.name}
@@ -93,8 +93,8 @@ const PhysiotherapistFeedbackPage = () => {
           </div>
 
           {/* Feedback Display */}
-          <div style={{ flex: "2" }}>
-            <h3>
+          <div className="physio-feedback__display">
+            <h3 className="physio-feedback__display-title">
               Feedback for{" "}
               {selectedClientId
                 ? clients.find((c) => c.id === selectedClientId)?.name
@@ -102,20 +102,17 @@ const PhysiotherapistFeedbackPage = () => {
             </h3>
             {selectedClientId ? (
               selectedClientFeedback.length > 0 ? (
-                <ul style={{ listStyle: "none", padding: 0 }}>
+                <ul className="physio-feedback__feedback-list">
                   {selectedClientFeedback.map((feedback) => (
                     <li
                       key={feedback.id}
-                      style={{
-                        borderBottom: "1px solid #ccc",
-                        padding: "0.5rem 0",
-                      }}
+                      className="physio-feedback__feedback-item"
                     >
                       <p>
                         <strong>Status:</strong> {feedback.status}
                       </p>
                       <p>{feedback.comments}</p>
-                      <p style={{ fontSize: "0.8rem", color: "#666" }}>
+                      <p className="physio-feedback__timestamp">
                         Posted on:{" "}
                         {new Date(feedback.timestamp).toLocaleDateString()}
                       </p>
@@ -123,10 +120,14 @@ const PhysiotherapistFeedbackPage = () => {
                   ))}
                 </ul>
               ) : (
-                <p>No feedback available for this client.</p>
+                <p className="physio-feedback__no-feedback">
+                  No feedback available for this client.
+                </p>
               )
             ) : (
-              <p>Please select a client to view their feedback.</p>
+              <p className="physio-feedback__select-client">
+                Please select a client to view their feedback.
+              </p>
             )}
           </div>
         </div>

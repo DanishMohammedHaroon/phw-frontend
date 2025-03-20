@@ -1,0 +1,81 @@
+.physio-feedback {
+  padding: 2rem;
+
+  &__title {
+    margin-bottom: 1.5rem;
+  }
+
+  &__loading,
+  &__error {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  &__error {
+    color: red;
+  }
+
+  &__container {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &__clients {
+    flex: 1;
+  }
+
+  &__clients-title {
+    margin-bottom: 1rem;
+  }
+
+  &__client-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__client-item {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+
+  &__client-item--selected {
+    color: blue;
+  }
+
+  &__display {
+    flex: 2;
+  }
+
+  &__display-title {
+    margin-bottom: 1rem;
+  }
+
+  &__feedback-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__feedback-item {
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem 0;
+  }
+
+  &__timestamp {
+    font-size: 0.8rem;
+    color: #666;
+  }
+
+  &__no-feedback,
+  &__select-client {
+    font-style: italic;
+  }
+}

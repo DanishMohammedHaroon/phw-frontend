@@ -1,0 +1,78 @@
+.client-workout-setup {
+  padding: 2rem;
+
+  &__title {
+    margin-bottom: 1.5rem;
+  }
+
+  &__days-selector {
+    margin-bottom: 1.5rem;
+  }
+
+  &__days-title {
+    margin-bottom: 0.5rem;
+  }
+
+  &__day-label {
+    margin-right: 1rem;
+    font-size: 1rem;
+  }
+
+  &__divider {
+    margin: 1.5rem 0;
+    border: none;
+    border-top: 1px solid #ccc;
+  }
+
+  &__workout-container {
+    margin-bottom: 1.5rem;
+  }
+
+  &__workout-title {
+    margin-bottom: 1rem;
+  }
+
+  &__loading {
+    font-style: italic;
+  }
+
+  &__error {
+    color: red;
+  }
+
+  &__empty {
+    font-style: italic;
+  }
+
+  &__workout-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__workout-item {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__workout-info {
+    flex-grow: 1;
+  }
+
+  &__workout-exercise {
+    margin: 0 0 0.5rem;
+  }
+
+  &__workout-details {
+    margin: 0;
+  }
+}
+
+.round-progress-tracker {
+  cursor: pointer;
+}

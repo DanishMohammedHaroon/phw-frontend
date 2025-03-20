@@ -1,0 +1,38 @@
+.feedback {
+  margin-top: 2rem;
+
+  &__title {
+    margin-bottom: 0.5rem;
+  }
+
+  &__description {
+    margin-bottom: 1rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+
+    & > .feedback__textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    & > .feedback__button {
+      padding: 0.5rem;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+  }
+
+  &__error {
+    color: red;
+    margin-top: 1rem;
+  }
+
+  &__success {
+    color: green;
+    margin-top: 1rem;
+  }
+}

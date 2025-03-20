@@ -2,7 +2,7 @@ import "./ExerciseCatalogPage.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Back from "../../components/BackButton/BackButton"
+import Back from "../../components/BackButton/BackButton";
 
 const ExerciseCatalog = () => {
   const [exercises, setExercises] = useState([]);
@@ -25,22 +25,29 @@ const ExerciseCatalog = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading exercises...</p>;
+    return <p className="exercise-catalog__loading">Loading exercises...</p>;
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return <p className="exercise-catalog__error">{error}</p>;
   }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Exercise Catalog</h2>
-      <ul>
+    <div className="exercise-catalog">
+      <h2 className="exercise-catalog__title">Exercise Catalog</h2>
+      <ul className="exercise-catalog__list">
         {exercises.map((exercise) => (
-          <li key={exercise.exercise_id}>
-            <h3>{exercise.title}</h3>
-            <p>{exercise.description}</p>
-            <Link to={`/exercise/${exercise.exercise_id}`}>View Details</Link>
+          <li key={exercise.exercise_id} className="exercise-catalog__item">
+            <h3 className="exercise-catalog__item-title">{exercise.title}</h3>
+            <p className="exercise-catalog__item-description">
+              {exercise.description}
+            </p>
+            <Link
+              to={`/exercise/${exercise.exercise_id}`}
+              className="exercise-catalog__item-link"
+            >
+              View Details
+            </Link>
           </li>
         ))}
       </ul>

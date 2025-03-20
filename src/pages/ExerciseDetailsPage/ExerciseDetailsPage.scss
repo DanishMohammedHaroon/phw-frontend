@@ -1,0 +1,58 @@
+.exercise-detail {
+  padding: 2rem;
+
+  &__title {
+    margin-bottom: 1rem;
+  }
+
+  &__description,
+  &__difficulty,
+  &__category {
+    margin-bottom: 1rem;
+  }
+
+  &__body-parts {
+    margin-bottom: 1rem;
+  }
+
+  &__details {
+    margin-bottom: 1rem;
+  }
+
+  &__images {
+    margin-top: 1rem;
+
+    &-title {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__image {
+    max-width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+
+  &__back-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__loading,
+  &__error,
+  &__not-found {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 2rem 0;
+  }
+
+  &__error {
+    color: red;
+  }
+}

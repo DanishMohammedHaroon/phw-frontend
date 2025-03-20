@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import "./FeedbackComponent.scss";
 
 const FeedbackComponent = () => {
   const { user } = useAuth();
@@ -59,25 +60,27 @@ const FeedbackComponent = () => {
   };
 
   return (
-    <div style={{ marginTop: "2rem" }}>
-      <h3>Submit Feedback</h3>
-      <p>
+    <div className="feedback">
+      <h3 className="feedback__title">Submit Feedback</h3>
+      <p className="feedback__description">
         Your feedback will be sent to:{" "}
         <strong>{physioName || assignedPhysioId}</strong>
       </p>
-      <form onSubmit={handleSubmit}>
+      <form className="feedback__form" onSubmit={handleSubmit}>
         <textarea
+          className="feedback__textarea"
           placeholder="Enter your feedback"
           value={feedback}
           onChange={(e) => setFeedback(e.target.value)}
           rows="4"
           cols="50"
         />
-        <br />
-        <button type="submit">Submit Feedback</button>
+        <button type="submit" className="feedback__button">
+          Submit Feedback
+        </button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
+      {error && <p className="feedback__error">{error}</p>}
+      {successMsg && <p className="feedback__success">{successMsg}</p>}
     </div>
   );
 };

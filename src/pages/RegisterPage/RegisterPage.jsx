@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "./RegisterPage.scss";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -12,6 +14,7 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // Fetch physiotherapists only if role is client
   useEffect(() => {
@@ -59,7 +62,6 @@ const RegisterPage = () => {
         email: email.trim(),
         password, // Consider hashing on backend for production
         role,
-        // For clients, include the selected physiotherapist's ID; for physios, leave undefined or null.
         physiotherapistId: role === "client" ? Number(selectedPhysio) : null,
       };
 
@@ -88,66 +90,74 @@ const RegisterPage = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <div>
+    <div className="register-page">
+      <h2 className="register-page__title">Register</h2>
+      <form onSubmit={handleRegister} className="register-page__form">
+        <div className="register-page__form-group">
           <input
             type="text"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            className="register-page__input"
           />
         </div>
-        <div>
+        <div className="register-page__form-group">
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="register-page__input"
           />
         </div>
-        <div>
+        <div className="register-page__form-group">
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="register-page__input"
           />
         </div>
-        <div>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <div className="register-page__form-group">
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="register-page__select"
+          >
             <option value="client">Client</option>
             <option value="physio_therapist">Physiotherapist</option>
           </select>
         </div>
         {role === "client" && (
-          <div>
-            <label>
+          <div className="register-page__form-group">
+            <label className="register-page__label">
               Select Your Physiotherapist:{" "}
-              <select
-                value={selectedPhysio}
-                onChange={(e) => setSelectedPhysio(e.target.value)}
-              >
-                <option value="">--Select Physiotherapist--</option>
-                {physioList.map((physio) => (
-                  <option key={physio.id} value={physio.id}>
-                    {physio.name}
-                  </option>
-                ))}
-              </select>
             </label>
+            <select
+              value={selectedPhysio}
+              onChange={(e) => setSelectedPhysio(e.target.value)}
+              className="register-page__select"
+            >
+              <option value="">--Select Physiotherapist--</option>
+              {physioList.map((physio) => (
+                <option key={physio.id} value={physio.id}>
+                  {physio.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
-        <button type="submit">Register</button>
+        <button type="submit" className="register-page__button">
+          Register
+        </button>
       </form>
-      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
-      {successMsg && (
-        <p style={{ color: "green", marginTop: "1rem" }}>{successMsg}</p>
-      )}
+      {error && <p className="register-page__error">{error}</p>}
+      {successMsg && <p className="register-page__success">{successMsg}</p>}
     </div>
   );
 };

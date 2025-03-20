@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Modal from "react-modal";
+import "./HistoryModal.scss";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
@@ -82,20 +83,25 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await axios.get("http://localhost:5050/api/users/clients");
+        const response = await axios.get(
+          "http://localhost:5050/api/users/clients"
+        );
         const mapping = {};
         response.data.forEach((client) => {
           mapping[client.id] = client.name;
         });
         setClientMapping(mapping);
       } catch (err) {
-        console.error("Error fetching clients for mapping:", err.response?.data?.message);
+        console.error(
+          "Error fetching clients for mapping:",
+          err.response?.data?.message
+        );
       }
     };
     fetchClients();
   }, []);
 
-  // Helper to calculate progress percentage (if your assignment tracks completedSets)
+  // Helper to calculate progress percentage
   const getProgressPercentage = (assignment) => {
     const totalSets = assignment.sets;
     const completedSets = assignment.completedSets || 0;
@@ -105,7 +111,9 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   // Handler to delete an assignment
   const handleDelete = async (assignmentId) => {
     try {
-      await axios.delete(`http://localhost:5050/api/assignments/${assignmentId}`);
+      await axios.delete(
+        `http://localhost:5050/api/assignments/${assignmentId}`
+      );
       // Re-fetch history after deletion
       fetchHistory();
     } catch (error) {
@@ -119,25 +127,28 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel="Assignment History"
-      style={{
-        content: { maxWidth: "600px", margin: "auto", padding: "2rem" },
-      }}
+      className="history-modal"
+      overlayClassName="history-modal__overlay"
     >
-      <h2>Assignment History (Last 2 Weeks)</h2>
-      <button onClick={onRequestClose} style={{ float: "right" }}>
+      <h2 className="history-modal__title">
+        Assignment History (Last 2 Weeks)
+      </h2>
+      <button onClick={onRequestClose} className="history-modal__close-btn">
         Close
       </button>
       {loading ? (
-        <p>Loading history...</p>
+        <p className="history-modal__loading">Loading history...</p>
       ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <p className="history-modal__error">{error}</p>
       ) : history.length === 0 ? (
-        <p>No history found.</p>
+        <p className="history-modal__no-history">No history found.</p>
       ) : (
         history.map(([clientId, assignments]) => (
-          <div key={clientId} style={{ marginBottom: "1rem" }}>
-            <h3>Client: {clientMapping[clientId] || clientId}</h3>
-            <ul style={{ listStyle: "none", padding: 0 }}>
+          <div key={clientId} className="history-modal__client-group">
+            <h3 className="history-modal__client-title">
+              Client: {clientMapping[clientId] || clientId}
+            </h3>
+            <ul className="history-modal__assignment-list">
               {assignments
                 .sort(
                   (a, b) =>
@@ -147,59 +158,35 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
                 .map((assignment) => (
                   <li
                     key={assignment.id}
-                    style={{
-                      position: "relative",
-                      marginBottom: "1rem",
-                      padding: "0.5rem",
-                      border: "1px solid #ccc",
-                      borderRadius: "5px",
-                    }}
+                    className="history-modal__assignment-item"
                   >
-                    <div>
+                    <div className="history-modal__assignment-info">
                       <strong>Exercise:</strong>{" "}
                       {exerciseMapping[assignment.exerciseId] ||
                         assignment.exerciseId}{" "}
                       | <strong>Sets:</strong> {assignment.sets} |{" "}
                       <strong>Reps:</strong> {assignment.repetitions}
                     </div>
-                    <div>
-                      <strong>Progress:</strong> {getProgressPercentage(assignment)}%
-                      <div
-                        style={{
-                          background: "#e0e0e0",
-                          borderRadius: "5px",
-                          height: "8px",
-                          width: "100%",
-                          marginTop: "4px",
-                        }}
-                      >
+                    <div className="history-modal__progress-section">
+                      <strong>Progress:</strong>{" "}
+                      {getProgressPercentage(assignment)}%
+                      <div className="history-modal__progress-bar">
                         <div
+                          className="history-modal__progress"
                           style={{
                             width: `${getProgressPercentage(assignment)}%`,
-                            background: "#76c7c0",
-                            height: "100%",
-                            borderRadius: "5px",
                           }}
                         ></div>
                       </div>
                     </div>
                     <button
                       onClick={() => handleDelete(assignment.id)}
-                      style={{
-                        position: "absolute",
-                        top: "4px",
-                        right: "4px",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        fontSize: "1.2rem",
-                        color: "red",
-                      }}
+                      className="history-modal__delete-btn"
                       title="Delete assignment"
                     >
                       &times;
                     </button>
-                    <div>
+                    <div className="history-modal__timestamp">
                       <small>
                         Posted on:{" "}
                         {new Date(

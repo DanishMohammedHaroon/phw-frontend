@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import FeedbackComponent from "../../components/FeedbackComponent/FeedbackComponent";
+import "./ClientWorkoutSetupPage.scss";
 
 const daysOfWeek = [
   "Monday",
@@ -36,7 +37,6 @@ const ClientWorkoutSetupPage = () => {
             params: { patientId: clientId },
           }
         );
-        // Default completedSets to 0 if missing
         const data = response.data.map((assignment) => ({
           ...assignment,
           completedSets: assignment.completedSets || 0,
@@ -59,7 +59,6 @@ const ClientWorkoutSetupPage = () => {
         const response = await axios.get("http://localhost:5050/api/exercises");
         const mapping = {};
         response.data.forEach((ex) => {
-          // Assuming ex.exercise_id exists; fallback to ex.id if needed
           mapping[ex.exercise_id || ex.id] = ex.title;
         });
         setExerciseMapping(mapping);
@@ -97,42 +96,39 @@ const ClientWorkoutSetupPage = () => {
     );
   };
 
- const handleCompleteSet = async (assignmentId) => {
-   // Find the assignment from local state
-   const assignment = assignments.find((a) => a.id === assignmentId);
-   if (!assignment) return;
-
-   const newCompleted = Math.min(assignment.completedSets + 1, assignment.sets);
-
-   try {
-     // Send a PUT request to update the progress in the backend
-     await axios.put(
-       `http://localhost:5050/api/assignments/${assignmentId}/progress`,
-       {
-         newCompleted, // The new progress count
-       }
-     );
-     // If successful, update local state
-     setAssignments((prev) =>
-       prev.map((a) =>
-         a.id === assignmentId ? { ...a, completedSets: newCompleted } : a
-       )
-     );
-   } catch (err) {
-     console.error("Error updating progress:", err.response?.data || err);
-     // Optionally, display an error message to the user
-   }
- };
+  const handleCompleteSet = async (assignmentId) => {
+    const assignment = assignments.find((a) => a.id === assignmentId);
+    if (!assignment) return;
+    const newCompleted = Math.min(
+      assignment.completedSets + 1,
+      assignment.sets
+    );
+    try {
+      await axios.put(
+        `http://localhost:5050/api/assignments/${assignmentId}/progress`,
+        { newCompleted }
+      );
+      setAssignments((prev) =>
+        prev.map((a) =>
+          a.id === assignmentId ? { ...a, completedSets: newCompleted } : a
+        )
+      );
+    } catch (err) {
+      console.error("Error updating progress:", err.response?.data || err);
+    }
+  };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Your Workout Setup</h2>
+    <div className="client-workout-setup">
+      <h2 className="client-workout-setup__title">Your Workout Setup</h2>
 
       {/* Days Selector */}
-      <div>
-        <h3>Select Your Workout Days</h3>
+      <div className="client-workout-setup__days-selector">
+        <h3 className="client-workout-setup__days-title">
+          Select Your Workout Days
+        </h3>
         {daysOfWeek.map((day) => (
-          <label key={day} style={{ marginRight: "1rem" }}>
+          <label key={day} className="client-workout-setup__day-label">
             <input
               type="checkbox"
               checked={selectedDays.includes(day)}
@@ -143,39 +139,36 @@ const ClientWorkoutSetupPage = () => {
         ))}
       </div>
 
-      <hr />
+      <hr className="client-workout-setup__divider" />
 
       {/* Workout List */}
-      <div>
-        <h3>Your Assigned Workout</h3>
+      <div className="client-workout-setup__workout-container">
+        <h3 className="client-workout-setup__workout-title">
+          Your Assigned Workout
+        </h3>
         {loading ? (
-          <p>Loading your workout...</p>
+          <p className="client-workout-setup__loading">
+            Loading your workout...
+          </p>
         ) : error ? (
-          <p style={{ color: "red" }}>{error}</p>
+          <p className="client-workout-setup__error">{error}</p>
         ) : assignments.length === 0 ? (
-          <p>No workouts assigned yet.</p>
+          <p className="client-workout-setup__empty">
+            No workouts assigned yet.
+          </p>
         ) : (
-          <ul style={{ listStyle: "none", padding: 0 }}>
+          <ul className="client-workout-setup__workout-list">
             {assignments.map((assignment) => (
               <li
                 key={assignment.id}
-                style={{
-                  marginBottom: "1rem",
-                  border: "1px solid #ccc",
-                  padding: "1rem",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
+                className="client-workout-setup__workout-item"
               >
-                <div>
-                  {/* Display exercise title using the mapping */}
-                  <h4>
+                <div className="client-workout-setup__workout-info">
+                  <h4 className="client-workout-setup__workout-exercise">
                     {exerciseMapping[assignment.exerciseId] ||
                       assignment.exerciseId}
                   </h4>
-                  <p>
+                  <p className="client-workout-setup__workout-details">
                     Sets: {assignment.completedSets} / {assignment.sets} | Reps:{" "}
                     {assignment.repetitions}
                   </p>
@@ -191,12 +184,10 @@ const ClientWorkoutSetupPage = () => {
         )}
       </div>
 
-      <hr />
+      <hr className="client-workout-setup__divider" />
 
       {/* Feedback Section */}
-      <FeedbackComponent
-        physiotherapistName={physioName} // Pass the physio name for display in the component
-      />
+      <FeedbackComponent physiotherapistName={physioName} />
     </div>
   );
 };
@@ -208,7 +199,12 @@ const RoundProgressTracker = ({ totalSets, completedSets, onClick }) => {
   const progress = totalSets > 0 ? completedSets / totalSets : 0;
   const offset = circumference - progress * circumference;
   return (
-    <svg width="50" height="50" onClick={onClick} style={{ cursor: "pointer" }}>
+    <svg
+      width="50"
+      height="50"
+      onClick={onClick}
+      className="round-progress-tracker"
+    >
       <circle
         stroke="#e6e6e6"
         fill="transparent"

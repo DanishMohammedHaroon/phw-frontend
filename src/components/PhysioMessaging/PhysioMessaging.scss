@@ -1,0 +1,84 @@
+.physio-messaging {
+  display: flex;
+  height: 80vh;
+  padding: 1rem;
+
+  &__clients-panel {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    padding-right: 1rem;
+  }
+
+  &__clients-title {
+    margin-bottom: 1rem;
+  }
+
+  &__no-clients {
+    font-style: italic;
+  }
+
+  &__client-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__client-item {
+    padding: 0.5rem;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+
+    &--selected {
+      background-color: #f0f0f0;
+    }
+  }
+
+  &__conversation-panel {
+    flex: 2;
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__conversation-title {
+    margin-bottom: 1rem;
+  }
+
+  &__messages-container {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+  }
+
+  &__no-messages {
+    font-style: italic;
+  }
+
+  &__message {
+    margin-bottom: 0.5rem;
+  }
+
+  &__input-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__input {
+    width: 80%;
+    padding: 0.5rem;
+  }
+
+  &__send-button {
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+
+  &__error {
+    color: red;
+    margin-top: 1rem;
+  }
+}
