@@ -32,33 +32,35 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <h2 className="login-page__title">Login</h2>
-      <form onSubmit={handleLogin} className="login-page__form">
-        <div className="login-page__form-group">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="login-page__input"
-          />
-        </div>
-        <div className="login-page__form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="login-page__input"
-          />
-        </div>
-        <button type="submit" className="login-page__button">
-          Login
-        </button>
-      </form>
-      {error && <p className="login-page__error">{error}</p>}
+      <div className="login-page__wrapper">
+        <h2 className="login-page__title">Login</h2>
+        <form onSubmit={handleLogin} className="login-page__form">
+          <div className="login-page__form-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="login-page__input"
+            />
+          </div>
+          <div className="login-page__form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="login-page__input"
+            />
+          </div>
+          <button type="submit" className="login-page__button">
+            Login
+          </button>
+        </form>
+        {error && <p className="login-page__error">{error}</p>}
+      </div>
     </div>
   );
 };

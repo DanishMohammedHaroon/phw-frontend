@@ -1,0 +1,60 @@
+.header {
+ position: absolute;
+ display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+  background: transparent; 
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo {
+    background-image: url("../../assets/Images/page-topper.svg");
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: left;
+    height: 5rem;
+    flex: 1;
+    z-index: 2000;
+  }
+
+  .menu-container {
+    position: relative; // This allows the dropdown to be positioned absolutely relative to this container.
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; // Place the menu directly below the header
+  right: 0;
+  background: #333;
+  color: #080505;
+  width: 200px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px 0;
+  z-index: 100;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 10px 20px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #444;
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+  }
+}

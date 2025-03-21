@@ -1,0 +1,25 @@
+.footer {
+  position: absolute; // or 'fixed' if you want it to stay visible during scroll
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; // ensure it appears on top of the background image
+  background: transparent; // makes the footer see-through
+  padding: 10px 20px;
+
+  .footer-links {
+    display: flex;
+    justify-content: flex-end; // aligns all links to the right
+    align-items: center;
+
+    a {
+      margin-left: 15px;
+      display: inline-block;
+
+      img {
+        height: 30px; // adjust the size as needed
+        width: auto;
+      }
+    }
+  }
+}

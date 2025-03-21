@@ -18,7 +18,8 @@
     "react-modal": "^3.16.3",
     "react-router-dom": "^7.3.0",
     "sass": "^1.85.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "typeface-lato": "^1.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

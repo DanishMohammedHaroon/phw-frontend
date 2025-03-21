@@ -1,8 +1,11 @@
 import "./App.scss";
 import React from "react";
+import "typeface-lato";
 import ErrorBoundary from "./ErrorBoundary";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import Header from "./components/Header/Header"
+import Footer from "./components/Footer/Footer";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import ClientWorkoutSetupPage from "./pages//ClientWorkoutSetupPage/ClientWorkoutSetupPage";
 import SecureMessagingPage from "./pages/SecureMessagingPage/SecureMessagingPage";
@@ -18,6 +21,7 @@ import PhysiotherapistFeedbackPage from "./pages/PhysiotherapistFeedbackPage/Phy
 const App = () => {
   return (
     <Router>
+      <Header />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -49,6 +53,7 @@ const App = () => {
           element={<PhysiotherapistFeedbackPage />}
         />
       </Routes>
+      <Footer />
     </Router>
   );
 };
