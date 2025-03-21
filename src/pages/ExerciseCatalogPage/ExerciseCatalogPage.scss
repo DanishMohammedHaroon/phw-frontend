@@ -1,5 +1,5 @@
 .exercise-catalog {
-  padding: 2rem;
+      padding: 7rem 2rem 2rem 2rem;
 
   &__title {
     margin-bottom: 1rem;
@@ -9,13 +9,25 @@
     list-style: none;
     padding: 0;
     margin: 0;
+
   }
 
   &__item {
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    padding: 1rem;
-    border-radius: 4px;
+  background: rgba(34, 34, 34, 0.8);
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 10px;
+  background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #6e6e6e 0%, rgba(255, 255, 255, 0) 71.88%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #FFFFFF;
+  box-shadow: 0px 155px 62px rgba(0, 0, 0, 0.01), 0px 87px 52px rgba(0, 0, 0, 0.05), 0px 39px 39px rgba(0, 0, 0, 0.09), 0px 10px 21px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 23px;
+  transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+  cursor: pointer;
+  display:flex;
+  flex-direction: column;
+
+  &:hover {
+  transform: scale(1.05);
+}
   }
 
   &__item-title {
@@ -27,7 +39,7 @@
   }
 
   &__item-link {
-    color: #007bff;
+    color: black;
     text-decoration: none;
 
     &:hover {
