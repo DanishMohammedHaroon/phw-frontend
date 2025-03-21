@@ -107,7 +107,6 @@ const AssignmentManagerPage = () => {
 
       <div className="assignment-manager__client-select">
         <label>
-          Select Client:{" "}
           <select
             value={selectedClient}
             onChange={(e) => setSelectedClient(e.target.value)}
@@ -126,8 +125,6 @@ const AssignmentManagerPage = () => {
 
       <h3 className="assignment-manager__section-title">Add Exercise</h3>
       <div className="assignment-manager__add-exercise">
-        <label>
-          Exercise:{" "}
           <select
             value={selectedExercise}
             onChange={(e) => setSelectedExercise(e.target.value)}
@@ -139,7 +136,6 @@ const AssignmentManagerPage = () => {
               </option>
             ))}
           </select>
-        </label>
         <input
           type="number"
           placeholder="Sets"

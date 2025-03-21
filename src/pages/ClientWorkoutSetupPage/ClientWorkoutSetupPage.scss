@@ -1,6 +1,19 @@
 .client-workout-setup {
-  padding: 2rem;
-
+   padding: 11rem 2rem 16.8rem 2rem;
+  background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  padding-top: 10rem;
+  padding-bottom: 4rem;
+  padding-inline: 1rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  
   &__title {
     margin-bottom: 1.5rem;
   }

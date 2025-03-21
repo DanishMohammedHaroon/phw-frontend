@@ -159,7 +159,7 @@ const PhysioMessaging = () => {
         </h3>
         <div className="physio-messaging__messages-container">
           {messages.length === 0 ? (
-            <p className="physio-messaging__no-messages">No messages yet.</p>
+            <p className="physio-messaging__no-messages">Select a client to see their messages.</p>
           ) : (
             messages.map((msg, index) => (
               <div key={index} className="physio-messaging__message">

@@ -20,41 +20,46 @@ import PhysiotherapistFeedbackPage from "./pages/PhysiotherapistFeedbackPage/Phy
 
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/physio-dashboard" element={<PhysioDashboard />} />
-        <Route
-          path="/client-dashboard"
-          element={
-            <ErrorBoundary>
-              <ClientDashboard />
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path="/exercises"
-          element={
-            <ErrorBoundary>
-              <ExerciseCatalogPage />
-            </ErrorBoundary>
-          }
-        />
-        <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
-        <Route path="/assignment-manager" element={<AssignmentManagerPage />} />
-        <Route path="/client-workout" element={<ClientWorkoutSetupPage />} />
-        <Route path="/messaging" element={<SecureMessagingPage />} />
-        <Route
-          path="/physio-feedback"
-          element={<PhysiotherapistFeedbackPage />}
-        />
-      </Routes>
-      <Footer />
-    </Router>
+    <div className="container">
+      <Router>
+        <Header />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/physio-dashboard" element={<PhysioDashboard />} />
+          <Route
+            path="/client-dashboard"
+            element={
+              <ErrorBoundary>
+                <ClientDashboard />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/exercises"
+            element={
+              <ErrorBoundary>
+                <ExerciseCatalogPage />
+              </ErrorBoundary>
+            }
+          />
+          <Route path="/exercise/:id" element={<ExerciseDetailsPage />} />
+          <Route
+            path="/assignment-manager"
+            element={<AssignmentManagerPage />}
+          />
+          <Route path="/client-workout" element={<ClientWorkoutSetupPage />} />
+          <Route path="/messaging" element={<SecureMessagingPage />} />
+          <Route
+            path="/physio-feedback"
+            element={<PhysiotherapistFeedbackPage />}
+          />
+        </Routes>
+        <Footer />
+      </Router>
+    </div>
   );
 };
 

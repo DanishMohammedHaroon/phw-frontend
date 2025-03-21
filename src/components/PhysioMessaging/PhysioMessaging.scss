@@ -2,6 +2,19 @@
   display: flex;
   height: 80vh;
   padding: 1rem;
+  background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+  padding-inline: 1rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
 
   &__clients-panel {
     flex: 1;
@@ -64,6 +77,7 @@
   &__input-container {
     display: flex;
     align-items: center;
+    flex-direction: column;
   }
 
   &__input {
