@@ -91,73 +91,75 @@ const RegisterPage = () => {
 
   return (
     <div className="register-page">
-      <h2 className="register-page__title">Register</h2>
-      <form onSubmit={handleRegister} className="register-page__form">
-        <div className="register-page__form-group">
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="register-page__input"
-          />
-        </div>
-        <div className="register-page__form-group">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="register-page__input"
-          />
-        </div>
-        <div className="register-page__form-group">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="register-page__input"
-          />
-        </div>
-        <div className="register-page__form-group">
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="register-page__select"
-          >
-            <option value="client">Client</option>
-            <option value="physio_therapist">Physiotherapist</option>
-          </select>
-        </div>
-        {role === "client" && (
+      <div className="register-page__wrapper">
+        <h2 className="register-page__title">Register</h2>
+        <form onSubmit={handleRegister} className="register-page__form">
           <div className="register-page__form-group">
-            <label className="register-page__label">
-              Select Your Physiotherapist:{" "}
-            </label>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="register-page__input"
+            />
+          </div>
+          <div className="register-page__form-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="register-page__input"
+            />
+          </div>
+          <div className="register-page__form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="register-page__input"
+            />
+          </div>
+          <div className="register-page__form-group">
             <select
-              value={selectedPhysio}
-              onChange={(e) => setSelectedPhysio(e.target.value)}
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
               className="register-page__select"
             >
-              <option value="">--Select Physiotherapist--</option>
-              {physioList.map((physio) => (
-                <option key={physio.id} value={physio.id}>
-                  {physio.name}
-                </option>
-              ))}
+              <option value="client">Client</option>
+              <option value="physio_therapist">Physiotherapist</option>
             </select>
           </div>
-        )}
-        <button type="submit" className="register-page__button">
-          Register
-        </button>
-      </form>
-      {error && <p className="register-page__error">{error}</p>}
-      {successMsg && <p className="register-page__success">{successMsg}</p>}
+          {role === "client" && (
+            <div className="register-page__form-group">
+              <label className="register-page__label">
+                Select Your Physiotherapist:{" "}
+              </label>
+              <select
+                value={selectedPhysio}
+                onChange={(e) => setSelectedPhysio(e.target.value)}
+                className="register-page__select"
+              >
+                <option value="">--Select Physiotherapist--</option>
+                {physioList.map((physio) => (
+                  <option key={physio.id} value={physio.id}>
+                    {physio.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          <button type="submit" className="register-page__button">
+            Register
+          </button>
+        </form>
+        {error && <p className="register-page__error">{error}</p>}
+        {successMsg && <p className="register-page__success">{successMsg}</p>}
+      </div>
     </div>
   );
 };
