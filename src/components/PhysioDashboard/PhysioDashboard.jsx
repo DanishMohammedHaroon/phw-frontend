@@ -14,6 +14,7 @@ const PhysioDashboard = () => {
 
   return (
     <div className="physio-dashboard">
+      <div className="physio-dashboard__card">
       <h2 className="physio-dashboard__title">Physiotherapist Dashboard</h2>
       <p className="physio-dashboard__description">
         Welcome, Physiotherapist! Choose an option below:
@@ -46,6 +47,7 @@ const PhysioDashboard = () => {
       >
         Log Out
       </button>
+      </div>
     </div>
   );
 };
