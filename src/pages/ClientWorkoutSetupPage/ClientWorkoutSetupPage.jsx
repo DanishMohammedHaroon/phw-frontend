@@ -4,16 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 import FeedbackComponent from "../../components/FeedbackComponent/FeedbackComponent";
 import "./ClientWorkoutSetupPage.scss";
 
-const daysOfWeek = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
-
 const ClientWorkoutSetupPage = () => {
   const { user } = useAuth();
   const clientId = user?.id;
@@ -121,23 +111,6 @@ const ClientWorkoutSetupPage = () => {
   return (
     <div className="client-workout-setup">
       <h2 className="client-workout-setup__title">Your Workout Setup</h2>
-
-      {/* Days Selector */}
-      <div className="client-workout-setup__days-selector">
-        <h3 className="client-workout-setup__days-title">
-          Select Your Workout Days
-        </h3>
-        {daysOfWeek.map((day) => (
-          <label key={day} className="client-workout-setup__day-label">
-            <input
-              type="checkbox"
-              checked={selectedDays.includes(day)}
-              onChange={() => handleDayToggle(day)}
-            />
-            {day}
-          </label>
-        ))}
-      </div>
 
       <hr className="client-workout-setup__divider" />
 
