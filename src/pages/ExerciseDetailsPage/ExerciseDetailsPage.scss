@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as*;
+
 .exercise-detail {
   padding: 10rem 2rem 2rem 2rem;
   background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
@@ -13,6 +15,13 @@
   position: relative;
   width: 100%;
   min-height: 100vh;
+
+  &__page{
+
+      @include tablet{
+  margin-inline: 12rem;
+  }
+  }
   &__title {
     margin-bottom: 1rem;
   }

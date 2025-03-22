@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as*;
+
 .client-dashboard {
   padding: 11rem 2rem 16.8rem 2rem;
   background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
@@ -27,7 +29,10 @@
 
   &:hover {
   transform: scale(1.05);
-}
+  }
+  @include tablet{
+  margin-inline: 12rem;
+  }
 }
 
   &__heading {
