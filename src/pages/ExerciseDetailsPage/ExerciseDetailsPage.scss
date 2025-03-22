@@ -1,6 +1,18 @@
 .exercise-detail {
   padding: 10rem 2rem 2rem 2rem;
-
+  background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+  object-position: center;
+  text-align: center;
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+  padding-inline: 1rem;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
   &__title {
     margin-bottom: 1rem;
   }
@@ -34,13 +46,16 @@
   }
 
   &__back-link {
-    display: inline-block;
-    margin-top: 1rem;
-    color: #007bff;
+   display: inline-block;
+    color: #1b62ad;
     text-decoration: none;
+    margin: 0 0.5rem;
+    transition: color 0.3s, transform 0.6s ease;
+
 
     &:hover {
-      text-decoration: underline;
+      color: black;
+      transform: scale(1.1);
     }
   }
 

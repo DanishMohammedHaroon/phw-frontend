@@ -39,11 +39,16 @@
   }
 
   &__item-link {
-    color: black;
+   display: inline-block;
+    color: #1b62ad;
     text-decoration: none;
+    margin: 0 0.5rem;
+    transition: color 0.3s, transform 0.6s ease;
+
 
     &:hover {
-      text-decoration: underline;
+      color: black;
+      transform: scale(1.1);
     }
   }
 
