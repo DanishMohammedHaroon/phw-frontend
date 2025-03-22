@@ -61,7 +61,9 @@
   }
     }
   }
-
+  &__field{
+      padding-block: 1rem;
+}
   &__error {
     color: red;
     margin-top: 1rem;

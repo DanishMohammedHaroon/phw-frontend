@@ -9,6 +9,7 @@ const FeedbackComponent = () => {
   const assignedPhysioId = user?.physiotherapistId;
   const [physioName, setPhysioName] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [status, setStatus] = useState("completed"); // New state for status selection
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
@@ -48,11 +49,13 @@ const FeedbackComponent = () => {
       await axios.post("http://localhost:5050/api/feedback", {
         patientId: user.id,
         physiotherapistId: assignedPhysioId,
-        status: "completed",
+        status: status, // Use the selected status from the dropdown
         comments: feedback.trim(),
       });
       setSuccessMsg("Feedback submitted successfully!");
       setFeedback("");
+      // Optionally, reset the status to default if desired
+      setStatus("completed");
     } catch (err) {
       console.error("Error submitting feedback:", err.response?.data?.message);
       setError("Failed to submit feedback.");
@@ -67,6 +70,17 @@ const FeedbackComponent = () => {
         <strong>{physioName || assignedPhysioId}</strong>
       </p>
       <form className="feedback__form" onSubmit={handleSubmit}>
+        <div className="feedback__field">
+          <label htmlFor="status">Status:</label>
+          <select
+            id="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="completed">Completed</option>
+            <option value="incomplete">Incomplete</option>
+          </select>
+        </div>
         <textarea
           className="feedback__textarea"
           placeholder="Enter your feedback"
