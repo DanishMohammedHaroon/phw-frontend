@@ -1,5 +1,7 @@
+@use "../../styles/mixins" as*;
+
 .physio-feedback {
-    padding: 11rem 2rem 16.8rem 2rem;
+  padding: 11rem 2rem 16.8rem 2rem;
   background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
   background-repeat: no-repeat;
   background-size: cover;
@@ -69,6 +71,9 @@
 
   &__display-title {
     margin-bottom: 1rem;
+      @include tablet{
+      display: flex;
+    }
   }
 
   &__feedback-list {
@@ -80,6 +85,15 @@
   &__feedback-item {
     border-bottom: 1px solid #ccc;
     padding: 0.5rem 0;
+    @include tablet{
+      margin-right: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    @include desktop{
+      margin-right: 24rem;
+    }
   }
 
   &__timestamp {
@@ -90,5 +104,6 @@
   &__no-feedback,
   &__select-client {
     font-style: italic;
+    display: flex;
   }
 }

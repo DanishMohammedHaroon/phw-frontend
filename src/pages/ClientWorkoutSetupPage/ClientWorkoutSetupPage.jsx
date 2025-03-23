@@ -160,7 +160,9 @@ const ClientWorkoutSetupPage = () => {
       <hr className="client-workout-setup__divider" />
 
       {/* Feedback Section */}
-      <FeedbackComponent physiotherapistName={physioName} />
+      <div className="client-workout-setup__feedback">
+        <FeedbackComponent physiotherapistName={physioName} />
+      </div>
     </div>
   );
 };

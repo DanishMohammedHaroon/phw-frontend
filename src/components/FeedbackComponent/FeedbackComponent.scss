@@ -12,6 +12,7 @@
   &__form {
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     & > .feedback__textarea {
       width: 100%;
@@ -34,6 +35,7 @@
     position: relative;
     overflow: hidden;
     font-weight: bold;
+    width: fit-content;
 
   &::after {
     content: "";

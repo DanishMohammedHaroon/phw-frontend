@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as*;
+
 .client-messaging {
   height: 80vh;
   padding: 1rem;
@@ -25,6 +27,12 @@
     height: 60vh;
     overflow-y: auto;
     margin-bottom: 1rem;
+    @include tablet{
+      margin-inline: 4rem;
+    }
+    @include desktop{
+      margin-inline: 12rem
+    }
   }
 
   &__message {
@@ -36,6 +44,12 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    @include tablet{
+      margin-inline: 4rem;
+    }
+    @include desktop{
+      margin-inline: 12rem
+    }
   }
 
   &__input {

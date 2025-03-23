@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as*;
+
 .client-workout-setup {
   padding: 11rem 2rem 16.8rem 2rem;
   background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, #c2bfbf 0%, rgba(255, 255, 255, 0) 71.88%), #FFFFFF;
@@ -35,10 +37,30 @@
     margin: 1.5rem 0;
     border: none;
     border-top: 1px solid #ccc;
+    @include tablet{
+      margin-inline: 10rem;
+    }
+    @include desktop{
+      margin-inline: 25rem;
+    }
+  }
+  &__feedback{
+    @include tablet{
+      margin-inline: 10rem;
+    }
+    @include desktop{
+      margin-inline: 25rem;
+    }
   }
 
   &__workout-container {
     margin-bottom: 1.5rem;
+        @include tablet{
+      margin-inline: 10rem;
+    }
+    @include desktop{
+      margin-inline: 25rem;
+    }
   }
 
   &__workout-title {
