@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as*;
+
 .exercise-catalog {
       padding: 7rem 2rem 2rem 2rem;
 
@@ -27,7 +29,13 @@
 
   &:hover {
   transform: scale(1.05);
-}
+  }
+  @include tablet{
+    margin-inline: 3rem;
+  }
+  @include desktop{
+    margin-inline: 16rem;
+  }
   }
 
   &__item-title {
