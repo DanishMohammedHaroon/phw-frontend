@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect to login if not logged in; otherwise, route based on role
+  // Redirect to login if not logged in else route to the appropriate role-based dashboard component
   useEffect(() => {
     if (!user) {
       navigate("/login");

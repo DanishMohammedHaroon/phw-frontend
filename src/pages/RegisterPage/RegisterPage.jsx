@@ -16,7 +16,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Fetch physiotherapists only if role is client
+  //GET physiotherapists only if role is client
   useEffect(() => {
     if (role === "client") {
       const fetchPhysios = async () => {
@@ -35,7 +35,7 @@ const RegisterPage = () => {
       };
       fetchPhysios();
     } else {
-      // Clear physiotherapist selection if role is not client
+  
       setPhysioList([]);
       setSelectedPhysio("");
     }
@@ -44,12 +44,11 @@ const RegisterPage = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Basic input validation
     if (!name.trim() || !email.trim() || !password.trim() || !role) {
       setError("All fields are required.");
       return;
     }
-    // If role is client, ensure a physiotherapist is selected
+
     if (role === "client" && !selectedPhysio) {
       setError("Please select a physiotherapist.");
       return;
@@ -60,7 +59,7 @@ const RegisterPage = () => {
       const payload = {
         name: name.trim(),
         email: email.trim(),
-        password, // Consider hashing on backend for production
+        password, 
         role,
         physiotherapistId: role === "client" ? Number(selectedPhysio) : null,
       };

@@ -22,7 +22,7 @@ const PhysioMessaging = () => {
     };
   }, []);
 
-  // Fetch physiotherapist info
+
   useEffect(() => {
     const fetchPhysio = async () => {
       try {

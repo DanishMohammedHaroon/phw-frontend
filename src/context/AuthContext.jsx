@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("token") || null;
   });
 
-  // Optional: Use an effect to sync state changes with localStorage
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -36,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   const login = (userData, tokenData) => {
     setUser(userData);
     setToken(tokenData);
-    // The useEffect hooks will handle storing these values in localStorage.
+ 
   };
 
   // Logout function: clear state and remove from localStorage

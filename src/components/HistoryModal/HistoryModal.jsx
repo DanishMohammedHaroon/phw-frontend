@@ -17,21 +17,18 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
   const fetchHistory = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch all assignments from the generic endpoint
+  
       const response = await axios.get("http://localhost:5050/api/assignments");
       let assignments = response.data;
 
-      // Filter assignments for the current physiotherapist
       assignments = assignments.filter(
         (assignment) =>
           String(assignment.physiotherapistId) === String(physiotherapistId)
       );
 
-      // Calculate the date two weeks ago
       const twoWeeksAgo = new Date();
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
-      // Filter assignments from the last two weeks
       assignments = assignments.filter((assignment) => {
         const date = assignment.created_at
           ? new Date(assignment.created_at)
@@ -62,7 +59,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
     }
   }, [isOpen, physiotherapistId, fetchHistory]);
 
-  // Fetch exercises to build a mapping from exercise_id to title
+  // GET exercises to build a mapping from exercise_id to title
   useEffect(() => {
     const fetchExercises = async () => {
       try {
@@ -79,7 +76,7 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
     fetchExercises();
   }, []);
 
-  // Fetch clients to build a mapping from client id to name
+  //GET clients to build a mapping from client id to name
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -108,13 +105,13 @@ const HistoryModal = ({ isOpen, onRequestClose, physiotherapistId }) => {
     return totalSets ? Math.round((completedSets / totalSets) * 100) : 0;
   };
 
-  // Handler to delete an assignment
+  // Handler to DELETE an assignment
   const handleDelete = async (assignmentId) => {
     try {
       await axios.delete(
         `http://localhost:5050/api/assignments/${assignmentId}`
       );
-      // Re-fetch history after deletion
+
       fetchHistory();
     } catch (error) {
       console.error("Error deleting assignment:", error);

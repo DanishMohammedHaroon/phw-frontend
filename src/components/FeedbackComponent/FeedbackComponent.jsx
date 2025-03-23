@@ -49,12 +49,12 @@ const FeedbackComponent = () => {
       await axios.post("http://localhost:5050/api/feedback", {
         patientId: user.id,
         physiotherapistId: assignedPhysioId,
-        status: status, // Use the selected status from the dropdown
+        status: status,
         comments: feedback.trim(),
       });
       setSuccessMsg("Feedback submitted successfully!");
       setFeedback("");
-      // Optionally, reset the status to default if desired
+
       setStatus("completed");
     } catch (err) {
       console.error("Error submitting feedback:", err.response?.data?.message);

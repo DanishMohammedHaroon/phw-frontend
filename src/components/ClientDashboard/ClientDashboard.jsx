@@ -37,7 +37,6 @@ const ClientDashboard = () => {
               Messaging
             </Link>
           </li>
-          {/* Add more links as needed */}
         </ul>
         <button
           className="client-dashboard__logout-button"

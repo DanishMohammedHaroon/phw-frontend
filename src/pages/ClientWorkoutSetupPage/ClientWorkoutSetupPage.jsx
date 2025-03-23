@@ -16,7 +16,7 @@ const ClientWorkoutSetupPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch assigned workouts for this client
+  //GET assigned workouts for this client
   useEffect(() => {
     const fetchAssignments = async () => {
       if (!clientId) return;
@@ -42,7 +42,7 @@ const ClientWorkoutSetupPage = () => {
     fetchAssignments();
   }, [clientId]);
 
-  // Fetch exercises to build a mapping (exercise id -> title)
+  //GET exercises to build a mapping
   useEffect(() => {
     const fetchExercises = async () => {
       try {
@@ -59,7 +59,7 @@ const ClientWorkoutSetupPage = () => {
     fetchExercises();
   }, []);
 
-  // Fetch physiotherapist info to get the name
+  //GET physiotherapist info to get the name
   useEffect(() => {
     const fetchPhysio = async () => {
       if (!assignedPhysioId) return;
@@ -79,12 +79,6 @@ const ClientWorkoutSetupPage = () => {
     fetchPhysio();
   }, [assignedPhysioId]);
 
-  // Handler for toggling workout days
-  const handleDayToggle = (day) => {
-    setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
-    );
-  };
 
   const handleCompleteSet = async (assignmentId) => {
     const assignment = assignments.find((a) => a.id === assignmentId);
@@ -167,7 +161,6 @@ const ClientWorkoutSetupPage = () => {
   );
 };
 
-// A simple round progress tracker using an SVG circle with an onClick handler
 const RoundProgressTracker = ({ totalSets, completedSets, onClick }) => {
   const radius = 20;
   const circumference = 2 * Math.PI * radius;

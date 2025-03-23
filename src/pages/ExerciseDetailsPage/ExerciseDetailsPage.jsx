@@ -4,11 +4,12 @@ import axios from "axios";
 import "./ExerciseDetailsPage.scss";
 
 const ExerciseDetail = () => {
-  const { id } = useParams(); // 'id' corresponds to exercise_id
+  const { id } = useParams(); 
   const [exercise, setExercise] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+//Get exercises by id
   useEffect(() => {
     const fetchExercise = async () => {
       try {

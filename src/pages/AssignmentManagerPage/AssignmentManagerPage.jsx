@@ -18,7 +18,7 @@ const AssignmentManagerPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [exercises, setExercises] = useState([]);
 
-  // Fetch the list of exercises for the dropdown
+  //GET the list of exercises for the dropdown
   useEffect(() => {
     const fetchExercises = async () => {
       try {
@@ -31,7 +31,7 @@ const AssignmentManagerPage = () => {
     fetchExercises();
   }, []);
 
-  // Fetch only clients using the new endpoint
+  // Fetch only clients
   useEffect(() => {
     const fetchClients = async () => {
       try {
@@ -59,7 +59,7 @@ const AssignmentManagerPage = () => {
     }
     setError("");
     const exerciseItem = {
-      exerciseId: selectedExercise, // using exercise_id from the database
+      exerciseId: selectedExercise,
       sets: parseInt(sets, 10),
       reps: parseInt(reps, 10),
       completedSets: 0,

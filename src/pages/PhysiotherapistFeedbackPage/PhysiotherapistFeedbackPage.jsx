@@ -13,7 +13,7 @@ const PhysiotherapistFeedbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch feedback for the physiotherapist
+  //GET feedback for the physiotherapist
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
@@ -36,7 +36,7 @@ const PhysiotherapistFeedbackPage = () => {
     }
   }, [physiotherapistId]);
 
-  // Fetch clients assigned to this physiotherapist
+  //GET clients assigned to this physiotherapist
   useEffect(() => {
     const fetchClients = async () => {
       try {

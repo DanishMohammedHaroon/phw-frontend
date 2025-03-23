@@ -8,6 +8,7 @@ const ExerciseCatalog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+//GET ale exrcises
   useEffect(() => {
     const fetchExercises = async () => {
       try {
